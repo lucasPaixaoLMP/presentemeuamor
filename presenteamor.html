@@ -1,0 +1,2067 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <meta name="theme-color" content="#FBF0D9">
+    <meta name="description" content="Uma edição especial Kindle escrita com todo o meu amor para você.">
+    <title>Para o Meu Amor — Kindle Edition</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts: Literata (Bookerly-like), Lora (Romântica), Inter (UI & Sans) e Cormorant Garamond (Capa) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,400;1,600&family=Inter:wght@400;500;600&family=Literata:ital,opsz,wght@0,7..72,400;0,7..72,500;0,7..72,600;1,7..72,400&family=Lora:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">
+    <!-- Phosphor Icons -->
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+
+    <style>
+        /* ==========================================================
+           VARIÁVEIS DE TEMA E TIPOGRAFIA (FIEL AO APP KINDLE)
+           ========================================================== */
+        :root {
+            /* Tema Padrão Inicial: Sépia Kindle (#FBF0D9) */
+            --bg-desktop: #d6cbb5;
+            --bg-page: #FBF0D9;
+            --bg-page-back: #f3e2c3;
+            --text-main: #2C221E;
+            --text-muted: #786655;
+            --hud-bg: rgba(251, 240, 217, 0.96);
+            --sheet-bg: #F6E7C8;
+            --border-color: #E2D2B5;
+            --accent-color: #9e473b;
+            --kindle-blue: #0066c0;
+            --highlight-bg: rgba(238, 187, 77, 0.35);
+            --highlight-border: #b88228;
+            --curl-shadow: rgba(32, 22, 12, 0.38);
+
+            /* Tipografia Dinâmica da Página */
+            --reader-font: 'Literata', Georgia, serif;
+            --reader-font-size: 1.06rem;
+            --reader-line-height: 1.76;
+            --reader-margin-x: 1.5rem;
+            --screen-brightness: 1;
+        }
+
+        [data-theme="light"] {
+            --bg-desktop: #d8dce2;
+            --bg-page: #FFFFFF;
+            --bg-page-back: #F2F3F5;
+            --text-main: #111111;
+            --text-muted: #686868;
+            --hud-bg: rgba(255, 255, 255, 0.96);
+            --sheet-bg: #F4F5F7;
+            --border-color: #E2E5E9;
+            --accent-color: #b83b5e;
+            --highlight-bg: rgba(255, 232, 117, 0.48);
+            --highlight-border: #d9a300;
+            --curl-shadow: rgba(0, 0, 0, 0.28);
+        }
+
+        [data-theme="green"] {
+            --bg-desktop: #adc7b0;
+            --bg-page: #C5E1C8;
+            --bg-page-back: #b4d4b8;
+            --text-main: #18281B;
+            --text-muted: #4B664F;
+            --hud-bg: rgba(197, 225, 200, 0.96);
+            --sheet-bg: #B5D5B9;
+            --border-color: #A3C6A8;
+            --accent-color: #8c3b32;
+            --highlight-bg: rgba(140, 201, 115, 0.45);
+            --highlight-border: #4e8c35;
+            --curl-shadow: rgba(16, 36, 19, 0.34);
+        }
+
+        [data-theme="dark"] {
+            --bg-desktop: #050506;
+            --bg-page: #121212;
+            --bg-page-back: #1c1c1f;
+            --text-main: #E0E0E0;
+            --text-muted: #888888;
+            --hud-bg: rgba(22, 22, 24, 0.96);
+            --sheet-bg: #1E1E20;
+            --border-color: #2E2E32;
+            --accent-color: #e06c75;
+            --highlight-bg: rgba(219, 174, 88, 0.24);
+            --highlight-border: #c9963b;
+            --curl-shadow: rgba(0, 0, 0, 0.78);
+        }
+
+        /* ==========================================================
+           RESET E ESTRUTURA MOBILE-FIRST (100dvh, SEM SCROLL GLOBAL)
+           ========================================================== */
+        * {
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        html, body {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100dvh;
+            overflow: hidden;
+            overscroll-behavior: none;
+            background-color: var(--bg-desktop);
+            color: var(--text-main);
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            user-select: none;
+            -webkit-user-select: none;
+            transition: background-color 0.35s ease;
+        }
+
+        /* Viewport Mobile-First: 100% no celular, 430px centralizado no Desktop */
+        #kindle-app-shell {
+            width: 100%;
+            max-width: 430px;
+            height: 100dvh;
+            margin: 0 auto;
+            background-color: var(--bg-page);
+            color: var(--text-main);
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            filter: brightness(var(--screen-brightness));
+            transition: background-color 0.35s ease, color 0.35s ease, filter 0.15s ease;
+            box-shadow: 0 0 60px rgba(0, 0, 0, 0.28);
+        }
+
+        @media (min-width: 500px) {
+            #kindle-app-shell {
+                border-left: 1px solid var(--border-color);
+                border-right: 1px solid var(--border-color);
+            }
+        }
+
+        /* Textura sutil de papel E-Ink */
+        .eink-paper-grain {
+            background-image: radial-gradient(rgba(120, 102, 85, 0.045) 1px, transparent 0);
+            background-size: 18px 18px;
+        }
+
+        /* ==========================================================
+           TIPOGRAFIA DE LEITURA E DESTAQUES POPULARES DO KINDLE
+           ========================================================== */
+        .reader-content-area {
+            font-family: var(--reader-font);
+            font-size: var(--reader-font-size);
+            line-height: var(--reader-line-height);
+            padding-left: var(--reader-margin-x);
+            padding-right: var(--reader-margin-x);
+            text-align: justify;
+            hyphens: auto;
+            -webkit-hyphens: auto;
+        }
+
+        .serif-display {
+            font-family: 'Cormorant Garamond', Georgia, serif;
+        }
+
+        /* Capitular (Drop Cap) no primeiro parágrafo de cada capítulo */
+        .drop-cap::first-letter {
+            font-family: 'Cormorant Garamond', Georgia, serif;
+            float: left;
+            font-size: 3.35em;
+            line-height: 0.78;
+            padding-top: 4px;
+            padding-right: 10px;
+            padding-bottom: 2px;
+            color: var(--accent-color);
+            font-weight: 700;
+        }
+
+        /* Grifo Popular (Kindle Popular Highlight) */
+        .kindle-popular-highlight {
+            background-color: var(--highlight-bg);
+            border-bottom: 1.5px dashed var(--highlight-border);
+            border-radius: 2px;
+            padding: 0 2px;
+            cursor: pointer;
+            position: relative;
+            z-index: 35;
+            transition: filter 0.2s ease;
+        }
+
+        .kindle-popular-highlight:active {
+            filter: brightness(0.88);
+        }
+
+        .popular-highlight-caption {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            font-family: 'Inter', sans-serif;
+            font-size: 0.67rem;
+            line-height: 1.2;
+            color: var(--text-muted);
+            background-color: rgba(128, 128, 128, 0.09);
+            border-radius: 999px;
+            padding: 1px 7px;
+            margin-left: 5px;
+            vertical-align: middle;
+            cursor: pointer;
+            z-index: 35;
+            position: relative;
+        }
+
+        /* ==========================================================
+           SISTEMA DE DUPLA CAMADA PARA PAGE CURL 3D EM TEMPO REAL
+           ========================================================== */
+        #interactive-book-stage {
+            position: relative;
+            flex: 1;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            touch-action: none; /* Garante arraste horizontal fluido a 60fps */
+            perspective: 1600px;
+            cursor: grab;
+        }
+
+        #interactive-book-stage:active {
+            cursor: grabbing;
+        }
+
+        /* Folha Completa (Underlay = Próxima/Anterior, Active = Página Atual) */
+        .kindle-page-sheet {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            background-color: var(--bg-page);
+            color: var(--text-main);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            overflow: hidden;
+            will-change: clip-path, transform;
+            backface-visibility: hidden;
+        }
+
+        #underlay-page-sheet {
+            z-index: 10;
+        }
+
+        #active-page-sheet {
+            z-index: 20;
+            transform-origin: left center;
+        }
+
+        /* Sombra Projetada pela Dobra sobre a Página de Baixo */
+        #curl-drop-shadow {
+            position: absolute;
+            top: -10%;
+            bottom: -10%;
+            width: 68px;
+            z-index: 24;
+            pointer-events: none;
+            opacity: 0;
+            background: linear-gradient(to right,
+                rgba(0, 0, 0, 0) 0%,
+                var(--curl-shadow) 48%,
+                rgba(0, 0, 0, 0.08) 78%,
+                rgba(0, 0, 0, 0) 100%);
+            will-change: transform, opacity;
+        }
+
+        /* Aba Curvada 3D do Verso da Folha (O cilindro de papel que acompanha o dedo) */
+        #curl-backside-flap {
+            position: absolute;
+            top: -4%;
+            bottom: -4%;
+            width: 80px;
+            z-index: 25;
+            pointer-events: none;
+            opacity: 0;
+            border-radius: 3px 0 0 3px;
+            background: linear-gradient(to right,
+                rgba(0, 0, 0, 0.16) 0%,
+                var(--bg-page-back) 14%,
+                var(--bg-page) 56%,
+                var(--bg-page-back) 88%,
+                rgba(0, 0, 0, 0.22) 100%);
+            box-shadow:
+                -10px 0 24px var(--curl-shadow),
+                inset 2px 0 5px rgba(255, 255, 255, 0.45),
+                inset -3px 0 8px rgba(0, 0, 0, 0.12);
+            will-change: transform, width, opacity;
+            overflow: hidden;
+        }
+
+        /* Textura de linhas sutis espelhadas no verso da folha dobrada */
+        #curl-backside-flap::after {
+            content: "";
+            position: absolute;
+            inset: 14% 12%;
+            background-image: repeating-linear-gradient(
+                to bottom,
+                rgba(120, 102, 85, 0.07) 0px,
+                rgba(120, 102, 85, 0.07) 2px,
+                transparent 2px,
+                transparent 16px
+            );
+            opacity: 0.65;
+            transform: scaleX(-1) skewY(-2deg);
+        }
+
+        /* Animação Clássica E-Ink Flash */
+        @keyframes einkFlash {
+            0% { filter: invert(0); }
+            25% { filter: invert(0.08) contrast(1.08); }
+            100% { filter: invert(0); }
+        }
+        .eink-flash-anim {
+            animation: einkFlash 0.26s ease;
+        }
+
+        /* ==========================================================
+           HUD OCULTÁVEL E BOTTOM SHEETS NATIVOS
+           ========================================================== */
+        .hud-top-bar {
+            transform: translateY(-105%);
+            transition: transform 0.28s cubic-bezier(0.32, 0.72, 0, 1);
+            background-color: var(--hud-bg);
+            border-bottom: 1px solid var(--border-color);
+            backdrop-filter: blur(10px);
+        }
+
+        .hud-bottom-bar {
+            transform: translateY(105%);
+            transition: transform 0.28s cubic-bezier(0.32, 0.72, 0, 1);
+            background-color: var(--hud-bg);
+            border-top: 1px solid var(--border-color);
+            backdrop-filter: blur(10px);
+        }
+
+        .hud-visible .hud-top-bar,
+        .hud-visible .hud-bottom-bar {
+            transform: translateY(0);
+        }
+
+        /* Bottom Sheet genérico */
+        .bottom-sheet-backdrop {
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.25s ease;
+        }
+        .bottom-sheet-backdrop.open {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .bottom-sheet-panel {
+            transform: translateY(100%);
+            transition: transform 0.32s cubic-bezier(0.32, 0.72, 0, 1);
+            background-color: var(--sheet-bg);
+            border-top: 1px solid var(--border-color);
+        }
+        .bottom-sheet-backdrop.open .bottom-sheet-panel {
+            transform: translateY(0);
+        }
+
+        /* Fita de Marcador no Canto Direito */
+        .corner-bookmark-ribbon {
+            transform: translateY(-105%);
+            transition: transform 0.38s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+        .corner-bookmark-ribbon.active {
+            transform: translateY(0);
+        }
+
+        /* Partículas Românticas ao favoritar página */
+        @keyframes heartFloat {
+            0% { transform: translateY(0) scale(0.6); opacity: 0; }
+            25% { opacity: 0.95; }
+            100% { transform: translateY(-78px) scale(1.18); opacity: 0; }
+        }
+        .micro-heart {
+            position: absolute;
+            pointer-events: none;
+            z-index: 80;
+            animation: heartFloat 2s ease-out forwards;
+        }
+
+        /* Custom Range Input estilo Kindle */
+        input[type="range"].kindle-slider {
+            -webkit-appearance: none;
+            appearance: none;
+            height: 4px;
+            border-radius: 999px;
+            background: var(--border-color);
+            outline: none;
+        }
+        input[type="range"].kindle-slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            background: var(--accent-color);
+            cursor: pointer;
+            border: 2px solid var(--bg-page);
+            box-shadow: 0 1px 4px rgba(0,0,0,0.3);
+        }
+
+        /* Scrollbar Fina para Gavetas */
+        .thin-scroll::-webkit-scrollbar {
+            width: 4px;
+        }
+        .thin-scroll::-webkit-scrollbar-thumb {
+            background: var(--border-color);
+            border-radius: 999px;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- CONTAINER MOBILE-FIRST (100% no Smartphone / 430px Centralizado no Desktop) -->
+    <div id="kindle-app-shell" class="eink-paper-grain">
+
+        <!-- ==========================================================
+             1. TELA DE CAPA ESTILO LOCKSCREEN / BIBLIOTECA KINDLE
+             ========================================================== -->
+        <section id="cover-lockscreen" class="w-full h-full flex flex-col justify-between p-6 select-none z-40 relative transition-all duration-500">
+            
+            <!-- Moldura Editorial Clássica de Capa Kindle -->
+            <div class="w-full h-full border rounded-2xl p-6 flex flex-col justify-between relative overflow-hidden"
+                 style="border-color: var(--border-color); box-shadow: inset 0 0 40px rgba(0,0,0,0.03);">
+                
+                <!-- Cantoneiras sutis -->
+                <div class="flex justify-between items-center text-[11px] tracking-[0.22em] uppercase" style="color: var(--text-muted);">
+                    <span>✦ Kindle Edition</span>
+                    <span>Presente Exclusivo ✦</span>
+                </div>
+
+                <!-- Miolo da Capa -->
+                <div class="my-auto flex flex-col items-center text-center px-2">
+                    <!-- Selo de Colecionador -->
+                    <div class="w-16 h-16 rounded-full border flex items-center justify-center mb-6 shadow-xs"
+                         style="border-color: var(--border-color); background-color: rgba(158, 71, 59, 0.06);">
+                        <i class="ph-duotone ph-book-bookmark text-3xl" style="color: var(--accent-color);"></i>
+                    </div>
+
+                    <span class="text-[10px] uppercase tracking-[0.28em] font-semibold mb-2" style="color: var(--accent-color);">
+                        Edição Especial de Colecionador
+                    </span>
+
+                    <h1 id="cover-main-title" class="serif-display text-4xl sm:text-[42px] font-bold tracking-tight leading-none mb-3">
+                        Para o Meu Amor
+                    </h1>
+
+                    <p id="cover-subtitle" class="serif-display italic text-lg leading-relaxed max-w-[270px]" style="color: var(--text-muted);">
+                        “Uma edição especial sobre nós dois, escrita para ser lida com o coração.”
+                    </p>
+
+                    <!-- Ornamento Central -->
+                    <div class="flex items-center gap-3 my-6 opacity-75">
+                        <span class="w-10 h-[1px]" style="background-color: var(--border-color);"></span>
+                        <i class="ph-fill ph-heart text-xs" style="color: var(--accent-color);"></i>
+                        <span class="w-10 h-[1px]" style="background-color: var(--border-color);"></span>
+                    </div>
+
+                    <p id="cover-author" class="text-[11px] uppercase tracking-[0.22em] font-medium" style="color: var(--text-muted);">
+                        Autor: <span style="color: var(--text-main);">Lucas</span>
+                    </p>
+                </div>
+
+                <!-- Base da Capa: Gesto / Botão de Abrir Livro -->
+                <div class="flex flex-col items-center gap-3 pt-2">
+                    <button onclick="openReaderFromCover()"
+                            class="w-full py-3.5 px-5 rounded-xl font-medium text-sm text-white shadow-md active:scale-[0.98] transition-all flex items-center justify-center gap-2"
+                            style="background-color: var(--accent-color);">
+                        <i class="ph-bold ph-book-open text-lg"></i>
+                        <span>Toque ou arraste para abrir o livro</span>
+                    </button>
+
+                    <div class="flex items-center justify-between w-full text-[11px] pt-1 opacity-75" style="color: var(--text-muted);">
+                        <button onclick="openSheet('share-sheet')" class="underline font-medium flex items-center gap-1" style="color: var(--text-main);">
+                            <i class="ph-bold ph-qr-code"></i> QR Code / Link
+                        </button>
+                        <button onclick="openEditorSheet()" class="underline font-medium flex items-center gap-1" style="color: var(--accent-color);">
+                            <i class="ph ph-pencil-simple"></i> Personalizar texto
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+
+        <!-- ==========================================================
+             2. TELA DE LEITURA NATIVA DO KINDLE (COM PAGE CURL 3D EM TEMPO REAL)
+             ========================================================== -->
+        <main id="reader-viewport" class="hidden w-full h-full flex-col justify-between relative select-none overflow-hidden">
+
+            <!-- FITA DE MARCADOR DE PÁGINA NO CANTO SUPERIOR DIREITO -->
+            <div id="corner-ribbon" class="corner-bookmark-ribbon absolute top-0 right-5 z-30 pointer-events-none">
+                <div class="w-6 h-11 shadow-md flex items-end justify-center pb-1.5 rounded-b-sm"
+                     style="background-color: var(--accent-color); color: #ffffff;">
+                    <i class="ph-fill ph-heart text-[11px]"></i>
+                </div>
+            </div>
+
+            <!-- ======================================================
+                 BARRA SUPERIOR OCULTÁVEL (HUD TOP BAR DO KINDLE)
+                 ====================================================== -->
+            <header class="hud-top-bar absolute top-0 left-0 right-0 h-14 px-3 flex items-center justify-between z-40">
+                <!-- Esquerda: Voltar para a Capa -->
+                <button onclick="backToCover()" class="p-2 rounded-full active:bg-black/10 flex items-center gap-1 text-xs font-medium"
+                        title="Voltar para a Capa">
+                    <i class="ph-bold ph-caret-left text-lg"></i>
+                    <span class="text-[11px]">Capa</span>
+                </button>
+
+                <!-- Centro: Título Curto -->
+                <div class="flex flex-col items-center truncate px-2">
+                    <span id="hud-book-title" class="serif-display font-semibold text-sm tracking-wide truncate max-w-[140px]">
+                        Para o Meu Amor
+                    </span>
+                    <span class="text-[9px] uppercase tracking-widest opacity-60">Kindle Paperwhite</span>
+                </div>
+
+                <!-- Direita: Ícones Reais do App Kindle (Sumário, Notas, Aa, Bookmark) -->
+                <div class="flex items-center gap-0.5">
+                    <button onclick="openSheet('toc-sheet')" class="p-2 rounded-full active:bg-black/10" title="Capítulos">
+                        <i class="ph ph-list-bullets text-lg"></i>
+                    </button>
+
+                    <button onclick="openSheet('notes-sheet')" class="p-2 rounded-full active:bg-black/10 relative" title="Destaques e Notas">
+                        <i class="ph ph-notebook text-lg"></i>
+                        <span id="notes-count-badge" class="w-2 h-2 rounded-full absolute top-2 right-1.5" style="background-color: var(--accent-color);"></span>
+                    </button>
+
+                    <button onclick="openSheet('aa-sheet')" class="px-2.5 py-1.5 rounded-full active:bg-black/10 font-serif font-semibold text-sm" title="Configurações de Leitura Aa">
+                        Aa
+                    </button>
+
+                    <button id="hud-bookmark-btn" onclick="togglePageBookmark(event)" class="p-2 rounded-full active:bg-black/10" title="Marcar Página">
+                        <i id="hud-bookmark-icon" class="ph ph-bookmark-simple text-lg"></i>
+                    </button>
+                </div>
+            </header>
+
+
+            <!-- ======================================================
+                 PALCO INTERATIVO DE DUPLA FOLHA (ARRASTE COM O DEDO / PAGE CURL)
+                 ====================================================== -->
+            <div id="interactive-book-stage">
+
+                <!-- CAMADA 1: PÁGINA DE BAIXO (REVELADA ENQUANTO O DEDO DOBRA A FOLHA ATUAL) -->
+                <div id="underlay-page-sheet" class="kindle-page-sheet eink-paper-grain pointer-events-none">
+                    <!-- Cabeçalho da Página de Baixo -->
+                    <div class="w-full pt-3.5 pb-1 px-6 flex items-center justify-center">
+                        <span id="underlay-running-header" class="text-[10px] uppercase tracking-[0.22em] font-medium truncate opacity-60"
+                              style="color: var(--text-muted);">
+                            PARA O MEU AMOR
+                        </span>
+                    </div>
+
+                    <!-- Miolo da Página de Baixo -->
+                    <div class="flex-1 w-full flex flex-col justify-center overflow-hidden my-auto py-2">
+                        <article class="reader-content-area w-full my-auto">
+                            <div id="underlay-chapter-heading" class="text-center mb-5 hidden">
+                                <span id="underlay-chapter-label" class="text-[10px] uppercase tracking-[0.26em] font-semibold block mb-1"
+                                      style="color: var(--accent-color);"></span>
+                                <h2 id="underlay-chapter-title" class="serif-display text-2xl font-bold tracking-tight leading-snug"></h2>
+                                <div class="flex items-center justify-center gap-2 mt-2 opacity-60">
+                                    <span class="w-7 h-[1px]" style="background-color: var(--border-color);"></span>
+                                    <span class="text-[10px]" style="color: var(--accent-color);">❦</span>
+                                    <span class="w-7 h-[1px]" style="background-color: var(--border-color);"></span>
+                                </div>
+                            </div>
+                            <div id="underlay-paragraphs" class="space-y-3.5"></div>
+                        </article>
+                    </div>
+
+                    <!-- Rodapé da Página de Baixo -->
+                    <div class="w-full pt-1 pb-3 px-6 flex items-center justify-between text-[10px] tracking-wide"
+                         style="color: var(--text-muted);">
+                        <span id="underlay-footer-left">Posição 142 de 520 • 20%</span>
+                        <span id="underlay-footer-right">1 min restante no capítulo</span>
+                    </div>
+                </div>
+
+
+                <!-- CAMADA 2: PÁGINA ATUAL (QUE DOBRA COM O DEDO EM TEMPO REAL) -->
+                <div id="active-page-sheet" class="kindle-page-sheet eink-paper-grain">
+                    <!-- Cabeçalho da Página Atual -->
+                    <div class="w-full pt-3.5 pb-1 px-6 flex items-center justify-center pointer-events-none">
+                        <span id="active-running-header" class="text-[10px] uppercase tracking-[0.22em] font-medium truncate opacity-60"
+                              style="color: var(--text-muted);">
+                            PARA O MEU AMOR
+                        </span>
+                    </div>
+
+                    <!-- Miolo da Página Atual -->
+                    <div class="flex-1 w-full flex flex-col justify-center overflow-hidden my-auto py-2">
+                        <article id="active-page-article" class="reader-content-area w-full my-auto relative z-20">
+                            <div id="active-chapter-heading" class="text-center mb-5">
+                                <span id="active-chapter-label" class="text-[10px] uppercase tracking-[0.26em] font-semibold block mb-1"
+                                      style="color: var(--accent-color);">
+                                    CAPÍTULO I
+                                </span>
+                                <h2 id="active-chapter-title" class="serif-display text-2xl font-bold tracking-tight leading-snug">
+                                    O Começo da Nossa História
+                                </h2>
+                                <div class="flex items-center justify-center gap-2 mt-2 opacity-60">
+                                    <span class="w-7 h-[1px]" style="background-color: var(--border-color);"></span>
+                                    <span class="text-[10px]" style="color: var(--accent-color);">❦</span>
+                                    <span class="w-7 h-[1px]" style="background-color: var(--border-color);"></span>
+                                </div>
+                            </div>
+
+                            <div id="active-paragraphs" class="space-y-3.5"></div>
+                        </article>
+                    </div>
+
+                    <!-- Rodapé Nativo Sempre Visível do Kindle Paperwhite -->
+                    <div class="w-full pt-1 pb-3 px-6 flex items-center justify-between text-[10px] tracking-wide pointer-events-none"
+                         style="color: var(--text-muted);">
+                        <span id="active-footer-left">Posição 86 de 520 • 16%</span>
+                        <span id="active-footer-right">1 min restante no capítulo</span>
+                    </div>
+                </div>
+
+
+                <!-- CAMADA 3: SOMBRA DINÂMICA E ABA CURVADA 3D DO VERSO DA FOLHA -->
+                <div id="curl-drop-shadow"></div>
+                <div id="curl-backside-flap"></div>
+
+            </div>
+
+
+            <!-- ======================================================
+                 BARRA INFERIOR OCULTÁVEL (HUD BOTTOM BAR COM PREVIEW E SLIDER)
+                 ====================================================== -->
+            <footer class="hud-bottom-bar absolute bottom-0 left-0 right-0 px-5 pt-3 pb-4 z-40 flex flex-col gap-2.5">
+                
+                <!-- Mini-Card de Preview Flutuante ao Arrastar o Scrubber -->
+                <div id="scrubber-preview-bubble" class="hidden mb-1 p-2.5 rounded-xl border shadow-md text-[11px] flex-col gap-0.5 transition-all"
+                     style="background-color: var(--bg-page); border-color: var(--border-color);">
+                    <div class="flex items-center justify-between font-semibold" style="color: var(--accent-color);">
+                        <span id="preview-bubble-chap">CAPÍTULO I</span>
+                        <span id="preview-bubble-pos">Pág. 1</span>
+                    </div>
+                    <p id="preview-bubble-snippet" class="truncate italic opacity-80" style="color: var(--text-muted);"></p>
+                </div>
+
+                <!-- Capítulo Atual e Página -->
+                <div class="flex items-center justify-between text-[11px]">
+                    <span id="hud-slider-chapter" class="font-medium truncate max-w-[210px]" style="color: var(--text-main);">
+                        Capítulo 1
+                    </span>
+                    <span id="hud-slider-page" style="color: var(--text-muted);">
+                        Página 1 de 6
+                    </span>
+                </div>
+
+                <!-- Slider Interativo de Página do Kindle -->
+                <div class="flex items-center gap-3">
+                    <button onclick="triggerAnimatedTurn('prev')" class="p-1 rounded-lg active:bg-black/10" title="Página Anterior">
+                        <i class="ph-bold ph-caret-left text-sm"></i>
+                    </button>
+                    <input id="page-progress-slider" type="range" min="0" max="5" step="1" value="0"
+                           oninput="onSliderScrub(this.value)"
+                           onchange="hideScrubberPreview()"
+                           class="kindle-slider flex-1">
+                    <button onclick="triggerAnimatedTurn('next')" class="p-1 rounded-lg active:bg-black/10" title="Próxima Página">
+                        <i class="ph-bold ph-caret-right text-sm"></i>
+                    </button>
+                </div>
+
+                <!-- Ações Rápidas Inferiores -->
+                <div class="flex items-center justify-between pt-1 border-t text-[11px]" style="border-color: var(--border-color);">
+                    <button onclick="openSheet('notes-sheet')" class="flex items-center gap-1.5 py-1 px-2 rounded-lg active:bg-black/10 font-medium"
+                            style="color: var(--text-muted);">
+                        <i class="ph-fill ph-highlighter-circle text-sm" style="color: var(--accent-color);"></i>
+                        <span>Notas do Autor</span>
+                    </button>
+
+                    <button onclick="openEditorSheet()" class="flex items-center gap-1.5 py-1 px-2.5 rounded-lg border font-medium active:scale-95 transition-transform"
+                            style="border-color: var(--border-color); color: var(--accent-color);">
+                        <i class="ph-bold ph-pencil-simple-line text-xs"></i>
+                        <span>Editar / Colar Texto</span>
+                    </button>
+                </div>
+            </footer>
+
+
+            <!-- ======================================================
+                 DICA VISUAL INICIAL (ONBOARDING DE ARRASTE DE PÁGINA 3D)
+                 ====================================================== -->
+            <div id="tap-zones-onboarding" onclick="dismissOnboarding()"
+                 class="hidden absolute inset-0 bg-black/65 backdrop-blur-[2px] z-50 flex-col justify-between p-5 text-white select-none cursor-pointer transition-opacity duration-300">
+                
+                <div class="text-center mt-6">
+                    <span class="px-3 py-1 rounded-full bg-white/15 text-[10px] uppercase tracking-widest font-semibold">
+                        Guia de Gestos do Kindle
+                    </span>
+                </div>
+
+                <!-- Colunas Visuais 25% | 50% | 25% -->
+                <div class="flex-1 my-5 border border-white/25 rounded-2xl grid grid-cols-4 overflow-hidden">
+                    <!-- Esquerda -->
+                    <div class="col-span-1 border-r border-dashed border-white/30 flex flex-col items-center justify-center p-2 text-center bg-white/5">
+                        <i class="ph-bold ph-hand-swipe-right text-2xl mb-2 text-amber-300"></i>
+                        <span class="text-[11px] font-semibold leading-tight">Voltar Folha</span>
+                        <span class="text-[9px] opacity-75 mt-1">Arraste p/ direita ou toque</span>
+                    </div>
+
+                    <!-- Centro -->
+                    <div class="col-span-2 border-r border-dashed border-white/30 flex flex-col items-center justify-center p-3 text-center">
+                        <i class="ph-bold ph-sliders-horizontal text-2xl mb-2 text-rose-300"></i>
+                        <span class="text-xs font-semibold">Menu Kindle & “Aa”</span>
+                        <span class="text-[10px] opacity-75 mt-1">Toque no centro para abrir os ajustes</span>
+                    </div>
+
+                    <!-- Direita -->
+                    <div class="col-span-1 flex flex-col items-center justify-center p-2 text-center bg-white/5">
+                        <i class="ph-bold ph-hand-swipe-left text-2xl mb-2 text-amber-300"></i>
+                        <span class="text-[11px] font-semibold leading-tight">Virar Folha 3D</span>
+                        <span class="text-[9px] opacity-75 mt-1">Arraste com o dedo p/ esquerda!</span>
+                    </div>
+                </div>
+
+                <div class="text-center mb-4 space-y-2">
+                    <p class="text-xs opacity-95">✨ <strong>Experimente arrastar o dedo devagar</strong> pela tela para dobrar a folha em tempo real!</p>
+                    <p class="text-[11px] opacity-80">💡 Toque nos <span class="underline decoration-dashed text-amber-300">trechos grifados</span> para ler as notas secretas do Lucas.</p>
+                    <span class="inline-block text-[11px] bg-white text-black font-semibold px-4 py-1.5 rounded-full mt-1">
+                        Toque para começar a ler
+                    </span>
+                </div>
+            </div>
+
+        </main>
+
+
+        <!-- ==========================================================
+             3. BOTTOM SHEET "Aa" (TEMAS, FONTES, ANIMAÇÃO DE PÁGINA E BRILHO)
+             ========================================================== -->
+        <div id="aa-sheet" onclick="closeSheet('aa-sheet')" class="bottom-sheet-backdrop fixed inset-0 bg-black/40 z-50 flex flex-col justify-end max-w-[430px] mx-auto">
+            <div onclick="event.stopPropagation()" class="bottom-sheet-panel w-full rounded-t-3xl p-5 pb-7 shadow-2xl space-y-4 max-h-[90dvh] overflow-y-auto thin-scroll">
+                
+                <!-- Puxador Nativo Mobile -->
+                <div class="w-10 h-1 rounded-full mx-auto opacity-30" style="background-color: var(--text-main);"></div>
+
+                <div class="flex items-center justify-between border-b pb-2" style="border-color: var(--border-color);">
+                    <span class="text-xs font-semibold uppercase tracking-wider" style="color: var(--text-muted);">
+                        Aparência & Animação (Kindle Aa)
+                    </span>
+                    <button onclick="closeSheet('aa-sheet')" class="p-1 rounded-full active:bg-black/10">
+                        <i class="ph-bold ph-x text-sm"></i>
+                    </button>
+                </div>
+
+                <!-- 1. Estilo de Animação de Virada de Página (Novidade!) -->
+                <div>
+                    <label class="text-[11px] font-medium flex items-center justify-between mb-2" style="color: var(--text-muted);">
+                        <span>Animação de Virada de Página</span>
+                        <span class="text-[10px] px-2 py-0.5 rounded-full font-semibold" style="background-color: rgba(158,71,59,0.12); color: var(--accent-color);">Interativo com o dedo</span>
+                    </label>
+                    <div class="grid grid-cols-3 gap-2">
+                        <button onclick="setTurnMode('curl')" id="btn-mode-curl"
+                                class="py-2 px-2 rounded-xl border-2 text-xs font-medium flex flex-col items-center gap-1"
+                                style="border-color: var(--accent-color);">
+                            <i class="ph-duotone ph-book-open-text text-base" style="color: var(--accent-color);"></i>
+                            <span>Folha 3D</span>
+                        </button>
+                        <button onclick="setTurnMode('slide')" id="btn-mode-slide"
+                                class="py-2 px-2 rounded-xl border text-xs font-medium flex flex-col items-center gap-1"
+                                style="border-color: var(--border-color);">
+                            <i class="ph-duotone ph-arrows-left-right text-base"></i>
+                            <span>Deslizar</span>
+                        </button>
+                        <button onclick="setTurnMode('eink')" id="btn-mode-eink"
+                                class="py-2 px-2 rounded-xl border text-xs font-medium flex flex-col items-center gap-1"
+                                style="border-color: var(--border-color);">
+                            <i class="ph-duotone ph-lightning text-base"></i>
+                            <span>Flash E-Ink</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- 2. Temas de Cor Reais do Kindle -->
+                <div>
+                    <label class="text-[11px] font-medium block mb-2" style="color: var(--text-muted);">Cor da Página</label>
+                    <div class="grid grid-cols-4 gap-2.5">
+                        <button onclick="applyTheme('light')" id="btn-theme-light"
+                                class="py-2 rounded-xl border text-xs font-medium flex flex-col items-center gap-1"
+                                style="background-color: #FFFFFF; color: #111111; border-color: #d1d5db;">
+                            <span class="w-4 h-4 rounded-full border border-gray-300 bg-white"></span>
+                            <span>Branco</span>
+                        </button>
+                        <button onclick="applyTheme('sepia')" id="btn-theme-sepia"
+                                class="py-2 rounded-xl border-2 text-xs font-medium flex flex-col items-center gap-1"
+                                style="background-color: #FBF0D9; color: #2C221E; border-color: var(--accent-color);">
+                            <span class="w-4 h-4 rounded-full border border-amber-800/30 bg-[#FBF0D9]"></span>
+                            <span>Sépia</span>
+                        </button>
+                        <button onclick="applyTheme('green')" id="btn-theme-green"
+                                class="py-2 rounded-xl border text-xs font-medium flex flex-col items-center gap-1"
+                                style="background-color: #C5E1C8; color: #18281B; border-color: #9ec4a2;">
+                            <span class="w-4 h-4 rounded-full border border-green-900/30 bg-[#C5E1C8]"></span>
+                            <span>Verde</span>
+                        </button>
+                        <button onclick="applyTheme('dark')" id="btn-theme-dark"
+                                class="py-2 rounded-xl border text-xs font-medium flex flex-col items-center gap-1"
+                                style="background-color: #121212; color: #E0E0E0; border-color: #333333;">
+                            <span class="w-4 h-4 rounded-full border border-gray-600 bg-[#121212]"></span>
+                            <span>Noturno</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- 3. Família da Fonte -->
+                <div>
+                    <label class="text-[11px] font-medium block mb-2" style="color: var(--text-muted);">Família da Fonte</label>
+                    <div class="grid grid-cols-3 gap-2">
+                        <button onclick="applyFontFamily('bookerly')" id="btn-font-bookerly"
+                                class="py-2 px-2 rounded-xl border-2 text-xs font-medium text-center"
+                                style="font-family: 'Literata', serif; border-color: var(--accent-color);">
+                            Bookerly
+                        </button>
+                        <button onclick="applyFontFamily('romantic')" id="btn-font-romantic"
+                                class="py-2 px-2 rounded-xl border text-xs font-medium text-center italic"
+                                style="font-family: 'Lora', serif; border-color: var(--border-color);">
+                            Romântica
+                        </button>
+                        <button onclick="applyFontFamily('sans')" id="btn-font-sans"
+                                class="py-2 px-2 rounded-xl border text-xs font-medium text-center"
+                                style="font-family: 'Inter', sans-serif; border-color: var(--border-color);">
+                            Sem Serifa
+                        </button>
+                    </div>
+                </div>
+
+                <!-- 4. Tamanho da Fonte (A- / A+) e Margens -->
+                <div class="grid grid-cols-2 gap-3">
+                    <div>
+                        <label class="text-[11px] font-medium block mb-1.5" style="color: var(--text-muted);">Tamanho do Texto</label>
+                        <div class="flex items-center border rounded-xl overflow-hidden" style="border-color: var(--border-color);">
+                            <button onclick="stepFontSize(-1)" class="flex-1 py-2 text-sm font-serif font-bold active:bg-black/10">A-</button>
+                            <div class="w-[1px] h-5" style="background-color: var(--border-color);"></div>
+                            <button onclick="stepFontSize(1)" class="flex-1 py-2 text-base font-serif font-bold active:bg-black/10">A+</button>
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="text-[11px] font-medium block mb-1.5" style="color: var(--text-muted);">Margens Laterais</label>
+                        <div class="grid grid-cols-3 border rounded-xl overflow-hidden text-xs" style="border-color: var(--border-color);">
+                            <button onclick="applyMargins('1.1rem')" class="py-2.5 active:bg-black/10">Peq</button>
+                            <button onclick="applyMargins('1.5rem')" class="py-2.5 border-x active:bg-black/10 font-semibold" style="border-color: var(--border-color);">Méd</button>
+                            <button onclick="applyMargins('2.1rem')" class="py-2.5 active:bg-black/10">Larga</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 5. Controle Deslizante de Brilho -->
+                <div>
+                    <div class="flex items-center justify-between text-[11px] mb-1.5" style="color: var(--text-muted);">
+                        <span class="flex items-center gap-1"><i class="ph ph-sun-dim text-sm"></i> Brilho do Kindle</span>
+                        <i class="ph ph-sun text-sm"></i>
+                    </div>
+                    <input type="range" min="0.5" max="1.1" step="0.05" value="1"
+                           oninput="applyBrightness(this.value)"
+                           class="kindle-slider w-full">
+                </div>
+            </div>
+        </div>
+
+
+        <!-- ==========================================================
+             4. BOTTOM SHEET DE NOTA DO AUTOR (POPULAR HIGHLIGHT CLICK)
+             ========================================================== -->
+        <div id="highlight-note-sheet" onclick="closeSheet('highlight-note-sheet')" class="bottom-sheet-backdrop fixed inset-0 bg-black/45 z-50 flex flex-col justify-end max-w-[430px] mx-auto">
+            <div onclick="event.stopPropagation()" class="bottom-sheet-panel w-full rounded-t-3xl p-6 pb-8 shadow-2xl">
+                <div class="w-10 h-1 rounded-full mx-auto mb-4 opacity-30" style="background-color: var(--text-main);"></div>
+
+                <!-- Cabeçalho Estilo Popular Highlight do Kindle -->
+                <div class="flex items-center justify-between pb-3 mb-4 border-b" style="border-color: var(--border-color);">
+                    <div class="flex items-center gap-2.5">
+                        <div class="w-8 h-8 rounded-full flex items-center justify-center text-white text-sm shadow-xs"
+                             style="background-color: var(--accent-color);">
+                            <i class="ph-fill ph-heart"></i>
+                        </div>
+                        <div>
+                            <h4 class="text-xs font-bold uppercase tracking-wider">Destaque Popular & Nota</h4>
+                            <p id="sheet-highlight-meta" class="text-[11px]" style="color: var(--text-muted);">
+                                Destacado por 1 pessoa (Lucas)
+                            </p>
+                        </div>
+                    </div>
+                    <button onclick="closeSheet('highlight-note-sheet')" class="p-1.5 rounded-full active:bg-black/10">
+                        <i class="ph-bold ph-x text-sm"></i>
+                    </button>
+                </div>
+
+                <!-- Trecho Grifado -->
+                <blockquote id="sheet-highlight-quote" class="text-xs italic pl-3 border-l-2 mb-4 py-1 leading-relaxed"
+                            style="border-color: var(--highlight-border); color: var(--text-muted);">
+                </blockquote>
+
+                <!-- Nota Romântica do Autor -->
+                <div class="p-4 rounded-2xl border mb-5" style="background-color: var(--bg-page); border-color: var(--border-color);">
+                    <span class="text-[10px] uppercase tracking-widest font-semibold block mb-1" style="color: var(--accent-color);">
+                        Nota do Autor para Você:
+                    </span>
+                    <p id="sheet-highlight-note" class="serif-display text-lg leading-relaxed" style="color: var(--text-main);"></p>
+                </div>
+
+                <button onclick="closeSheet('highlight-note-sheet')"
+                        class="w-full py-3 rounded-xl text-xs font-semibold uppercase tracking-wider text-white shadow-sm"
+                        style="background-color: var(--accent-color);">
+                    Guardar no Coração
+                </button>
+            </div>
+        </div>
+
+
+        <!-- ==========================================================
+             5. GAVETA DE SUMÁRIO (CAPÍTULOS)
+             ========================================================== -->
+        <div id="toc-sheet" onclick="closeSheet('toc-sheet')" class="bottom-sheet-backdrop fixed inset-0 bg-black/45 z-50 flex flex-col justify-end max-w-[430px] mx-auto">
+            <div onclick="event.stopPropagation()" class="bottom-sheet-panel w-full rounded-t-3xl p-5 pb-7 shadow-2xl max-h-[80dvh] flex flex-col">
+                <div class="w-10 h-1 rounded-full mx-auto mb-3 opacity-30" style="background-color: var(--text-main);"></div>
+
+                <div class="flex items-center justify-between pb-3 mb-3 border-b" style="border-color: var(--border-color);">
+                    <div class="flex items-center gap-2">
+                        <i class="ph-duotone ph-list-bullets text-lg" style="color: var(--accent-color);"></i>
+                        <h3 class="serif-display text-xl font-bold">Sumário do Livro</h3>
+                    </div>
+                    <button onclick="closeSheet('toc-sheet')" class="p-1.5 rounded-full active:bg-black/10">
+                        <i class="ph-bold ph-x text-sm"></i>
+                    </button>
+                </div>
+
+                <div id="toc-items-container" class="space-y-2 overflow-y-auto thin-scroll pr-1 flex-1"></div>
+            </div>
+        </div>
+
+
+        <!-- ==========================================================
+             6. GAVETA DE "MEUS DESTAQUES E NOTAS" (CADERNO KINDLE)
+             ========================================================== -->
+        <div id="notes-sheet" onclick="closeSheet('notes-sheet')" class="bottom-sheet-backdrop fixed inset-0 bg-black/45 z-50 flex flex-col justify-end max-w-[430px] mx-auto">
+            <div onclick="event.stopPropagation()" class="bottom-sheet-panel w-full rounded-t-3xl p-5 pb-7 shadow-2xl max-h-[82dvh] flex flex-col">
+                <div class="w-10 h-1 rounded-full mx-auto mb-3 opacity-30" style="background-color: var(--text-main);"></div>
+
+                <div class="flex items-center justify-between pb-3 mb-3 border-b" style="border-color: var(--border-color);">
+                    <div class="flex items-center gap-2">
+                        <i class="ph-duotone ph-notebook text-lg" style="color: var(--accent-color);"></i>
+                        <div>
+                            <h3 class="serif-display text-xl font-bold leading-none">Destaques & Notas</h3>
+                            <p class="text-[11px] mt-0.5" style="color: var(--text-muted);">Todos os trechos sublinhados pelo autor</p>
+                        </div>
+                    </div>
+                    <button onclick="closeSheet('notes-sheet')" class="p-1.5 rounded-full active:bg-black/10">
+                        <i class="ph-bold ph-x text-sm"></i>
+                    </button>
+                </div>
+
+                <div id="all-notes-container" class="space-y-3 overflow-y-auto thin-scroll pr-1 flex-1"></div>
+            </div>
+        </div>
+
+
+        <!-- ==========================================================
+             7. MODAL DE PERSONALIZAÇÃO / COLAR TEXTO DO USUÁRIO
+             ========================================================== -->
+        <div id="editor-sheet" onclick="closeSheet('editor-sheet')" class="bottom-sheet-backdrop fixed inset-0 bg-black/55 z-50 flex flex-col justify-end max-w-[430px] mx-auto">
+            <div onclick="event.stopPropagation()" class="bottom-sheet-panel w-full rounded-t-3xl p-5 pb-6 shadow-2xl max-h-[92dvh] flex flex-col">
+                <div class="w-10 h-1 rounded-full mx-auto mb-2 opacity-30" style="background-color: var(--text-main);"></div>
+
+                <div class="flex items-center justify-between pb-2.5 mb-3 border-b" style="border-color: var(--border-color);">
+                    <div>
+                        <h3 class="font-bold text-sm">Personalizar Livro / Colar Seu Texto</h3>
+                        <p class="text-[11px]" style="color: var(--text-muted);">
+                            Cole o texto que ele será dividido automaticamente em páginas Kindle!
+                        </p>
+                    </div>
+                    <button onclick="closeSheet('editor-sheet')" class="p-1.5 rounded-full active:bg-black/10">
+                        <i class="ph-bold ph-x text-sm"></i>
+                    </button>
+                </div>
+
+                <div class="space-y-3 overflow-y-auto thin-scroll pr-1 flex-1 text-xs">
+                    <div class="grid grid-cols-2 gap-2">
+                        <div>
+                            <label class="block font-medium mb-1" style="color: var(--text-muted);">Título na Capa</label>
+                            <input id="input-book-title" type="text" class="w-full px-3 py-2 rounded-xl border bg-transparent"
+                                   style="border-color: var(--border-color); color: var(--text-main);">
+                        </div>
+                        <div>
+                            <label class="block font-medium mb-1" style="color: var(--text-muted);">Seu Nome (Autor)</label>
+                            <input id="input-book-author" type="text" class="w-full px-3 py-2 rounded-xl border bg-transparent"
+                                   style="border-color: var(--border-color); color: var(--text-main);">
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="block font-medium mb-1" style="color: var(--text-muted);">
+                            Texto Completo <span class="opacity-70">(Separe parágrafos com linha em branco)</span>
+                        </label>
+                        <textarea id="input-full-story" rows="8"
+                                  placeholder="Cole aqui o seu texto romântico..."
+                                  class="w-full p-3 rounded-xl border bg-transparent leading-relaxed thin-scroll"
+                                  style="border-color: var(--border-color); color: var(--text-main);"></textarea>
+                    </div>
+
+                    <div class="p-3 rounded-xl border space-y-1" style="border-color: var(--border-color); background-color: var(--bg-page);">
+                        <p class="font-semibold flex items-center gap-1" style="color: var(--accent-color);">
+                            <i class="ph-fill ph-sparkle"></i> Dica de Formatação Kindle:
+                        </p>
+                        <p style="color: var(--text-muted);">
+                            • Para criar um novo capítulo, comece uma linha com <code class="px-1 py-0.5 rounded bg-black/10"># Nome do Capítulo</code><br>
+                            • Para grifar uma frase com nota, use <code class="px-1 py-0.5 rounded bg-black/10">[[frase destacada|sua nota romântica]]</code>
+                        </p>
+                    </div>
+                </div>
+
+                <div class="flex items-center justify-between gap-2 pt-3 mt-3 border-t" style="border-color: var(--border-color);">
+                    <button onclick="restoreDefaultStory()" class="px-3 py-2.5 rounded-xl text-xs border opacity-75"
+                            style="border-color: var(--border-color);">
+                        Restaurar Padrão
+                    </button>
+                    <button onclick="saveCustomStory()"
+                            class="flex-1 py-2.5 px-4 rounded-xl text-xs font-semibold text-white shadow-sm"
+                            style="background-color: var(--accent-color);">
+                        Paginar & Atualizar Kindle
+                    </button>
+                </div>
+            </div>
+        </div>
+
+
+        <!-- ==========================================================
+             8. MODAL DE COMPARTILHAMENTO & GUIA RÁPIDO VERCEL / QR CODE
+             ========================================================== -->
+        <div id="share-sheet" onclick="closeSheet('share-sheet')" class="bottom-sheet-backdrop fixed inset-0 bg-black/55 z-50 flex flex-col justify-end max-w-[430px] mx-auto">
+            <div onclick="event.stopPropagation()" class="bottom-sheet-panel w-full rounded-t-3xl p-5 pb-7 shadow-2xl max-h-[88dvh] flex flex-col">
+                <div class="w-10 h-1 rounded-full mx-auto mb-3 opacity-30" style="background-color: var(--text-main);"></div>
+
+                <div class="flex items-center justify-between pb-3 mb-3 border-b" style="border-color: var(--border-color);">
+                    <div class="flex items-center gap-2">
+                        <i class="ph-duotone ph-rocket-launch text-lg" style="color: var(--accent-color);"></i>
+                        <div>
+                            <h3 class="serif-display text-xl font-bold leading-none">Publicar & Presentear</h3>
+                            <p class="text-[11px] mt-0.5" style="color: var(--text-muted);">Pronto para hospedar na Vercel ou compartilhar</p>
+                        </div>
+                    </div>
+                    <button onclick="closeSheet('share-sheet')" class="p-1.5 rounded-full active:bg-black/10">
+                        <i class="ph-bold ph-x text-sm"></i>
+                    </button>
+                </div>
+
+                <div class="space-y-3 overflow-y-auto thin-scroll pr-1 text-xs">
+                    <div class="p-3.5 rounded-2xl border space-y-2" style="background-color: var(--bg-page); border-color: var(--border-color);">
+                        <span class="text-[10px] uppercase tracking-widest font-bold block" style="color: var(--accent-color);">
+                            Passo a Passo para colocar na Vercel:
+                        </span>
+                        <ol class="list-decimal list-inside space-y-1.5 leading-relaxed" style="color: var(--text-main);">
+                            <li>Quando me enviar seu texto final no chat, eu gravarei tudo direto no código para que funcione em qualquer celular.</li>
+                            <li>Baixe ou salve este arquivo com o nome exato <strong><code>index.html</code></strong> dentro de uma pasta no seu computador.</li>
+                            <li>Suba no seu <strong>GitHub</strong> e importe no painel da <strong>vercel.com/new</strong> (ou rode <code>npx vercel</code> na pasta pelo terminal).</li>
+                        </ol>
+                    </div>
+
+                    <div class="p-3.5 rounded-2xl border flex items-center justify-between gap-3" style="background-color: var(--bg-page); border-color: var(--border-color);">
+                        <div class="truncate">
+                            <span class="text-[10px] uppercase tracking-wider font-semibold block" style="color: var(--text-muted);">Link atual da página</span>
+                            <span id="current-share-url" class="font-mono text-[11px] truncate block mt-0.5">https://seu-presente.vercel.app</span>
+                        </div>
+                        <button onclick="copyPageLink()" id="btn-copy-link"
+                                class="px-3 py-2 rounded-xl text-white font-semibold shrink-0 active:scale-95 transition-transform"
+                                style="background-color: var(--accent-color);">
+                            Copiar Link
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+
+    <!-- ==========================================================
+         SCRIPT PRINCIPAL — ENGINE DE PAGINAÇÃO E INTERAÇÕES KINDLE
+         ========================================================== -->
+    <script>
+        /**
+         * TEXTO INICIAL ROMÂNTICO (PLACEHOLDER PRONTO PARA RECEBER O TEXTO DO USUÁRIO)
+         * Suporta capítulos iniciados por "# Título" e Destaques Populares com "[[Frase|Nota]]"
+         */
+        const DEFAULT_METADATA = {
+            title: "Para o Meu Amor",
+            subtitle: "“Uma edição especial sobre nós dois, escrita para ser lida com o coração.”",
+            author: "Lucas"
+        };
+
+        const DEFAULT_RAW_STORY = `# O Dia em que Tudo Mudou
+
+Existem momentos na vida que dividem a nossa história em um “antes” e um “depois”. Antes de você chegar, os dias seguiam um ritmo comum, mas desde o instante em que os nossos caminhos se cruzaram, [[tudo ganhou uma cor, uma música e um sentido completamente novo|Eu ainda me lembro exatamente do frio na barriga e do sorriso bobo que você colocou no meu rosto desde o nosso primeiro encontro.]].
+
+Este livro digital foi desenhado como o seu Kindle favorito para guardar em páginas eternas tudo o que você representa para mim. Aqui cada palavra foi escolhida pensando no brilho dos seus olhos.
+
+---
+
+Quando olho para trás e vejo como cada detalhe nos trouxe até aqui, tenho ainda mais certeza de que o destino caprichou quando escreveu o nosso encontro. [[Você se tornou a minha página favorita de todos os dias|Não importa quão corrido seja o dia, conversar com você e te abraçar é sempre o momento em que meu coração encontra paz.]].
+
+Continue arrastando a folha com o dedo ou tocando na lateral direita da tela: cada capítulo guarda um pedacinho do que sinto por você.
+
+# Meus Detalhes Favoritos em Você
+
+Se me pedissem para sublinhar as partes mais bonitas da minha rotina, todas elas teriam o seu nome. É impressionante como um simples olhar seu ou [[o som da sua risada consegue iluminar qualquer ambiente no mesmo segundo|Sério, a sua risada é oficialmente a minha trilha sonora favorita no mundo inteiro. ❤️]].
+
+Admiro a sua doçura, a sua força, o jeito carinhoso como você cuida de quem ama e como transforma momentos simples em memórias inesquecíveis.
+
+---
+
+Amar você é descobrir todos os dias que a felicidade mora nos pequenos detalhes: no nosso jeito de conversar pelo olhar, nas nossas piadas internas e [[na sensação única de estar em casa sempre que estou dentro do seu abraço|O seu abraço é o lugar mais seguro e aconchegante que existe para mim.]].
+
+Este espaço está pronto para receber o texto completo que estou escrevendo especialmente para você.
+
+# Para Todos os Próximos Capítulos
+
+Diferente dos livros comuns que terminam na última página, a nossa história é uma obra viva que continuamos escrevendo juntos. Ainda temos milhares de páginas em branco esperando pelas nossas próximas viagens, sonhos e conquistas.
+
+Obrigado por ser minha parceira, minha melhor amiga e o grande amor da minha vida. [[Eu escolheria você em todas as versões possíveis do universo, em todos os livros e em todas as vidas|Eu te amo hoje, amanhã e em todas as páginas que ainda vamos viver juntos! Para sempre seu.]].`;
+
+        // Estado Global do Leitor Kindle
+        let bookMeta = JSON.parse(localStorage.getItem('kindle_mobile_meta')) || { ...DEFAULT_METADATA };
+        let rawStoryText = localStorage.getItem('kindle_mobile_raw_story') || DEFAULT_RAW_STORY;
+        let pages = [];
+        let currentPage = 0;
+        let hudActive = false;
+        let onboardingShown = false;
+
+        // Modo de virada de página ('curl' = Folha 3D Realista, 'slide' = Deslizar Contínuo, 'eink' = Flash E-Ink)
+        let pageTurnMode = 'curl';
+
+        // Escala de tamanhos de fonte (A- / A+)
+        let fontStepIndex = 1;
+        const FONT_STEPS = ['0.96rem', '1.06rem', '1.16rem', '1.26rem', '1.38rem'];
+
+        // ==========================================================
+        // CONVERSOR DE TEXTO EM PÁGINAS DE TAMANHO MOBILE (SEM SCROLL)
+        // ==========================================================
+        function toRoman(num) {
+            const romans = ["I", "II", "III", "IV", "V", "VI", "VII", "VIII", "IX", "X", "XI", "XII"];
+            return romans[num - 1] || num;
+        }
+
+        function buildPaginatedBook(rawText) {
+            const lines = rawText.split(/\r?\n/);
+            const chapters = [];
+            let currentChap = {
+                title: "Nossa História",
+                paragraphs: []
+            };
+
+            let buffer = [];
+            lines.forEach(line => {
+                const trimmed = line.trim();
+                if (trimmed.startsWith('# ')) {
+                    if (buffer.length > 0) {
+                        currentChap.paragraphs.push(buffer.join(' '));
+                        buffer = [];
+                    }
+                    if (currentChap.paragraphs.length > 0) {
+                        chapters.push(currentChap);
+                    }
+                    currentChap = {
+                        title: trimmed.replace(/^#\s+/, '').trim(),
+                        paragraphs: []
+                    };
+                } else if (trimmed === '---') {
+                    if (buffer.length > 0) {
+                        currentChap.paragraphs.push(buffer.join(' '));
+                        buffer = [];
+                    }
+                    currentChap.paragraphs.push('__PAGE_BREAK__');
+                } else if (trimmed === '') {
+                    if (buffer.length > 0) {
+                        currentChap.paragraphs.push(buffer.join(' '));
+                        buffer = [];
+                    }
+                } else {
+                    buffer.push(trimmed);
+                }
+            });
+
+            if (buffer.length > 0) currentChap.paragraphs.push(buffer.join(' '));
+            if (currentChap.paragraphs.length > 0) chapters.push(currentChap);
+
+            const generatedPages = [];
+            chapters.forEach((chap, cIdx) => {
+                let pageParas = [];
+                let charCount = 0;
+                let isFirstPageOfChap = true;
+
+                chap.paragraphs.forEach(para => {
+                    if (para === '__PAGE_BREAK__') {
+                        if (pageParas.length > 0) {
+                            generatedPages.push({
+                                chapterIndex: cIdx,
+                                chapterRoman: `CAPÍTULO ${toRoman(cIdx + 1)}`,
+                                chapterTitle: chap.title,
+                                isChapterStart: isFirstPageOfChap,
+                                paragraphs: pageParas,
+                                bookmarked: false
+                            });
+                            pageParas = [];
+                            charCount = 0;
+                            isFirstPageOfChap = false;
+                        }
+                        return;
+                    }
+
+                    const cleanLen = para.replace(/\[\[(.*?)\|(.*?)\]\]/g, '$1').length;
+                    const maxCharsPerPage = isFirstPageOfChap ? 420 : 520;
+
+                    if (pageParas.length > 0 && (charCount + cleanLen > maxCharsPerPage || pageParas.length >= 2)) {
+                        generatedPages.push({
+                            chapterIndex: cIdx,
+                            chapterRoman: `CAPÍTULO ${toRoman(cIdx + 1)}`,
+                            chapterTitle: chap.title,
+                            isChapterStart: isFirstPageOfChap,
+                            paragraphs: pageParas,
+                            bookmarked: false
+                        });
+                        pageParas = [para];
+                        charCount = cleanLen;
+                        isFirstPageOfChap = false;
+                    } else {
+                        pageParas.push(para);
+                        charCount += cleanLen;
+                    }
+                });
+
+                if (pageParas.length > 0) {
+                    generatedPages.push({
+                        chapterIndex: cIdx,
+                        chapterRoman: `CAPÍTULO ${toRoman(cIdx + 1)}`,
+                        chapterTitle: chap.title,
+                        isChapterStart: isFirstPageOfChap,
+                        paragraphs: pageParas,
+                        bookmarked: false
+                    });
+                }
+            });
+
+            if (generatedPages.length > 1) generatedPages[1].bookmarked = true;
+            pages = generatedPages;
+        }
+
+        // ==========================================================
+        // INICIALIZAÇÃO E CAPA
+        // ==========================================================
+        function syncMetadataUI() {
+            document.getElementById('cover-main-title').textContent = bookMeta.title;
+            document.getElementById('cover-subtitle').textContent = bookMeta.subtitle;
+            document.getElementById('cover-author').innerHTML = `Autor: <span style="color: var(--text-main);">${bookMeta.author}</span>`;
+            document.getElementById('hud-book-title').textContent = bookMeta.title;
+        }
+
+        function openReaderFromCover() {
+            const cover = document.getElementById('cover-lockscreen');
+            const reader = document.getElementById('reader-viewport');
+
+            cover.style.opacity = '0';
+            cover.style.transform = 'translateX(-25px)';
+
+            setTimeout(() => {
+                cover.classList.add('hidden');
+                reader.classList.remove('hidden');
+                reader.classList.add('flex');
+                renderPageIntoSlot('active', currentPage);
+                syncHudAndBookmark();
+
+                if (!onboardingShown) {
+                    showOnboarding();
+                    onboardingShown = true;
+                }
+            }, 260);
+        }
+
+        function backToCover() {
+            setHudVisibility(false);
+            const cover = document.getElementById('cover-lockscreen');
+            const reader = document.getElementById('reader-viewport');
+
+            reader.classList.add('hidden');
+            reader.classList.remove('flex');
+            cover.classList.remove('hidden');
+
+            requestAnimationFrame(() => {
+                cover.style.opacity = '1';
+                cover.style.transform = 'translateX(0)';
+            });
+        }
+
+        function showOnboarding() {
+            const ob = document.getElementById('tap-zones-onboarding');
+            ob.classList.remove('hidden');
+            ob.classList.add('flex');
+        }
+
+        function dismissOnboarding() {
+            const ob = document.getElementById('tap-zones-onboarding');
+            ob.style.opacity = '0';
+            setTimeout(() => {
+                ob.classList.add('hidden');
+                ob.classList.remove('flex');
+                ob.style.opacity = '1';
+            }, 250);
+        }
+
+        // ==========================================================
+        // RENDERIZAÇÃO NAS DUAS FOLHAS (ACTIVE & UNDERLAY) PARA VIRADA REALISTA
+        // ==========================================================
+        function formatPopularHighlights(paragraphText, interactive = true) {
+            const regex = /\[\[(.*?)\|(.*?)\]\]/g;
+            return paragraphText.replace(regex, (_, quote, note) => {
+                if (!interactive) {
+                    return `<span class="kindle-popular-highlight">${quote}</span><span class="popular-highlight-caption"><i class="ph-fill ph-sparkle" style="color: var(--accent-color);"></i>Destacado por ${bookMeta.author} • ler nota</span>`;
+                }
+                const encodedQuote = encodeURIComponent(quote);
+                const encodedNote = encodeURIComponent(note);
+                return `<span class="kindle-popular-highlight pointer-events-auto" onclick="openHighlightNote('${encodedQuote}', '${encodedNote}', event)">${quote}</span><span class="popular-highlight-caption pointer-events-auto" onclick="openHighlightNote('${encodedQuote}', '${encodedNote}', event)"><i class="ph-fill ph-sparkle" style="color: var(--accent-color);"></i>Destacado por ${bookMeta.author} • ler nota</span>`;
+            });
+        }
+
+        /**
+         * Renderiza qualquer índice de página no slot 'active' (folha de cima) ou 'underlay' (folha de baixo)
+         */
+        function renderPageIntoSlot(slotPrefix, pageIdx) {
+            if (pageIdx < 0 || pageIdx >= pages.length) return;
+            const pageData = pages[pageIdx];
+            const isInteractive = slotPrefix === 'active';
+
+            // Cabeçalho superior discreto
+            document.getElementById(`${slotPrefix}-running-header`).textContent = pageData.isChapterStart
+                ? bookMeta.title.toUpperCase()
+                : pageData.chapterTitle.toUpperCase();
+
+            // Bloco de Título do Capítulo
+            const headingBlock = document.getElementById(`${slotPrefix}-chapter-heading`);
+            if (pageData.isChapterStart) {
+                headingBlock.classList.remove('hidden');
+                document.getElementById(`${slotPrefix}-chapter-label`).textContent = pageData.chapterRoman;
+                document.getElementById(`${slotPrefix}-chapter-title`).textContent = pageData.chapterTitle;
+            } else {
+                headingBlock.classList.add('hidden');
+            }
+
+            // Parágrafos
+            const parasContainer = document.getElementById(`${slotPrefix}-paragraphs`);
+            parasContainer.innerHTML = pageData.paragraphs.map((p, idx) => {
+                const isDropCap = pageData.isChapterStart && idx === 0;
+                const paraClass = isDropCap ? 'drop-cap' : 'indent-5';
+                return `<p class="${paraClass}">${formatPopularHighlights(p, isInteractive)}</p>`;
+            }).join('');
+
+            // Selo final na última página
+            if (pageIdx === pages.length - 1) {
+                parasContainer.innerHTML += `
+                    <div class="pt-4 text-center">
+                        <span class="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full text-[11px] italic border"
+                              style="border-color: var(--border-color); color: var(--accent-color);">
+                            <i class="ph-fill ph-infinity"></i> Continua em cada novo dia ao seu lado
+                        </span>
+                    </div>
+                `;
+            }
+
+            // Rodapé autêntico Kindle ("Posição 142 de 520 • X%")
+            const total = pages.length;
+            const totalLocations = total * 86;
+            const currentLoc = (pageIdx + 1) * 86;
+            const pct = Math.round(((pageIdx + 1) / total) * 100);
+            document.getElementById(`${slotPrefix}-footer-left`).textContent = `Posição ${currentLoc} de ${totalLocations} • ${pct}%`;
+
+            let remainingInChap = 0;
+            for (let i = pageIdx + 1; i < total; i++) {
+                if (pages[i].chapterIndex === pageData.chapterIndex) remainingInChap++;
+                else break;
+            }
+            document.getElementById(`${slotPrefix}-footer-right`).textContent = remainingInChap === 0
+                ? `Fim do capítulo`
+                : `Restam ${remainingInChap} min no capítulo`;
+        }
+
+        function syncHudAndBookmark() {
+            if (!pages.length) return;
+            const pageData = pages[currentPage];
+            const total = pages.length;
+            const pos = currentPage + 1;
+
+            const slider = document.getElementById('page-progress-slider');
+            slider.max = total - 1;
+            slider.value = currentPage;
+            document.getElementById('hud-slider-chapter').textContent = `${pageData.chapterRoman}: ${pageData.chapterTitle}`;
+            document.getElementById('hud-slider-page').textContent = `Página ${pos} de ${total}`;
+
+            syncBookmarkRibbon(pageData.bookmarked);
+        }
+
+        // ==========================================================
+        // ENGINE DE FÍSICA: ARRASTE DE PÁGINA EM TEMPO REAL (3D PAGE CURL & SLIDE)
+        // ==========================================================
+        const dragState = {
+            isPointerDown: false,
+            isDraggingPage: false,
+            isAnimating: false,
+            direction: null, // 'next' (arrastando p/ esquerda) ou 'prev' (arrastando p/ direita)
+            startX: 0,
+            startY: 0,
+            currentX: 0,
+            startTime: 0,
+            progress: 0, // 0.0 até 1.0
+            animFrameId: null
+        };
+
+        /**
+         * Aplica a geometria visual do progresso `p` (0.0 a 1.0) na folha atual, na folha de baixo,
+         * na aba curvada 3D e na sombra projetada
+         */
+        function applyCurlVisuals(p, direction) {
+            const stage = document.getElementById('interactive-book-stage');
+            const activeSheet = document.getElementById('active-page-sheet');
+            const underlaySheet = document.getElementById('underlay-page-sheet');
+            const flap = document.getElementById('curl-backside-flap');
+            const shadow = document.getElementById('curl-drop-shadow');
+
+            const width = stage.clientWidth || 390;
+            const clamped = Math.max(0, Math.min(1, p));
+
+            // Modo Flash E-Ink ou sem movimento
+            if (clamped <= 0.001) {
+                resetCurlLayers();
+                return;
+            }
+
+            // Modo Deslizar Contínuo (Kindle Slide)
+            if (pageTurnMode === 'slide') {
+                flap.style.opacity = '0';
+                shadow.style.opacity = String(Math.sin(clamped * Math.PI) * 0.65);
+
+                if (direction === 'next') {
+                    const tx = -clamped * width;
+                    activeSheet.style.clipPath = 'none';
+                    activeSheet.style.transform = `translate3d(${tx}px, 0, 0)`;
+                    underlaySheet.style.transform = `translate3d(${(1 - clamped) * 22}%, 0, 0)`;
+                    shadow.style.transform = `translate3d(${width + tx - 10}px, 0, 0)`;
+                } else {
+                    const tx = (1 - clamped) * -width;
+                    // Na volta, a página anterior entra da esquerda por cima
+                    activeSheet.style.clipPath = 'none';
+                    activeSheet.style.transform = `translate3d(${clamped * 22}%, 0, 0)`;
+                    underlaySheet.style.zIndex = '22';
+                    underlaySheet.style.transform = `translate3d(${tx}px, 0, 0)`;
+                    shadow.style.transform = `translate3d(${width + tx - 5}px, 0, 0)`;
+                }
+                return;
+            }
+
+            // Modo Padrão: FOLHA 3D REALISTA (3D Page Curl / Peel)
+            if (direction === 'next') {
+                // Posição X da linha de dobra (vem da direita 100% para a esquerda 0%)
+                const foldX = width * (1 - clamped);
+                const pctTop = Math.max(0, ((foldX + (1 - clamped) * 18) / width) * 100);
+                const pctBot = Math.max(0, ((foldX - (1 - clamped) * 14) / width) * 100);
+
+                // Recorta a página atual na linha diagonal da dobra
+                activeSheet.style.clipPath = `polygon(0% 0%, ${pctTop}% 0%, ${pctBot}% 100%, 0% 100%)`;
+                activeSheet.style.transform = `rotateY(${-clamped * 4.5}deg)`;
+
+                // Largura dinâmica do cilindro de papel dobrado
+                const flapW = Math.max(14, Math.sin(clamped * Math.PI) * 92);
+                const angleDeg = -2.2 * Math.sin(clamped * Math.PI);
+
+                flap.style.width = `${flapW}px`;
+                flap.style.opacity = String(Math.min(1, Math.sin(clamped * Math.PI) * 1.65));
+                flap.style.transform = `translate3d(${foldX - flapW * 0.45}px, 0, 0) rotateZ(${angleDeg}deg)`;
+
+                // Sombra projetada na página revelada embaixo
+                shadow.style.opacity = String(Math.sin(clamped * Math.PI) * 0.92);
+                shadow.style.transform = `translate3d(${foldX - 24}px, 0, 0) rotateZ(${angleDeg}deg)`;
+            } else if (direction === 'prev') {
+                // Puxando a página anterior da esquerda (0%) para a direita (100%)
+                const foldX = width * clamped;
+                const pctTop = Math.min(100, ((foldX + clamped * 14) / width) * 100);
+                const pctBot = Math.min(100, ((foldX - clamped * 14) / width) * 100);
+
+                // Coloca a página anterior (underlay) por cima sendo revelada da esquerda para a direita
+                underlaySheet.style.zIndex = '22';
+                underlaySheet.style.clipPath = `polygon(0% 0%, ${pctTop}% 0%, ${pctBot}% 100%, 0% 100%)`;
+
+                const flapW = Math.max(14, Math.sin(clamped * Math.PI) * 86);
+                const angleDeg = 1.8 * Math.sin(clamped * Math.PI);
+
+                flap.style.width = `${flapW}px`;
+                flap.style.opacity = String(Math.min(1, Math.sin(clamped * Math.PI) * 1.6));
+                flap.style.transform = `translate3d(${foldX - flapW * 0.55}px, 0, 0) rotateZ(${angleDeg}deg)`;
+
+                shadow.style.opacity = String(Math.sin(clamped * Math.PI) * 0.88);
+                shadow.style.transform = `translate3d(${foldX - 12}px, 0, 0) rotateZ(${angleDeg}deg)`;
+            }
+        }
+
+        function resetCurlLayers() {
+            const activeSheet = document.getElementById('active-page-sheet');
+            const underlaySheet = document.getElementById('underlay-page-sheet');
+            const flap = document.getElementById('curl-backside-flap');
+            const shadow = document.getElementById('curl-drop-shadow');
+
+            activeSheet.style.clipPath = 'none';
+            activeSheet.style.transform = 'none';
+            underlaySheet.style.clipPath = 'none';
+            underlaySheet.style.transform = 'none';
+            underlaySheet.style.zIndex = '10';
+            flap.style.opacity = '0';
+            shadow.style.opacity = '0';
+        }
+
+        /**
+         * Anima suavemente o progresso da página de `fromP` até `toP` (1 = conclui virada, 0 = volta com mola)
+         */
+        function animateCurlProgress(fromP, toP, direction, durationMs, onComplete) {
+            if (dragState.animFrameId) cancelAnimationFrame(dragState.animFrameId);
+            dragState.isAnimating = true;
+            const startTime = performance.now();
+
+            function frame(now) {
+                const elapsed = now - startTime;
+                const t = Math.min(1, elapsed / durationMs);
+                // Easing suave estilo iOS/Kindle (cubic-bezier out)
+                const eased = 1 - Math.pow(1 - t, 3);
+                const currentP = fromP + (toP - fromP) * eased;
+
+                applyCurlVisuals(currentP, direction);
+
+                if (t < 1) {
+                    dragState.animFrameId = requestAnimationFrame(frame);
+                } else {
+                    dragState.isAnimating = false;
+                    dragState.animFrameId = null;
+                    if (onComplete) onComplete();
+                }
+            }
+
+            dragState.animFrameId = requestAnimationFrame(frame);
+        }
+
+        /**
+         * Dispara virada de página animada por toque simples ou botões
+         */
+        function triggerAnimatedTurn(direction) {
+            if (dragState.isAnimating) return;
+
+            if (direction === 'next') {
+                if (currentPage >= pages.length - 1) return;
+
+                if (pageTurnMode === 'eink') {
+                    currentPage++;
+                    renderPageIntoSlot('active', currentPage);
+                    syncHudAndBookmark();
+                    const stage = document.getElementById('interactive-book-stage');
+                    stage.classList.remove('eink-flash-anim');
+                    void stage.offsetWidth;
+                    stage.classList.add('eink-flash-anim');
+                    return;
+                }
+
+                renderPageIntoSlot('underlay', currentPage + 1);
+                animateCurlProgress(0.02, 1, 'next', 360, () => {
+                    currentPage++;
+                    renderPageIntoSlot('active', currentPage);
+                    resetCurlLayers();
+                    syncHudAndBookmark();
+                });
+            } else if (direction === 'prev') {
+                if (currentPage <= 0) {
+                    backToCover();
+                    return;
+                }
+
+                if (pageTurnMode === 'eink') {
+                    currentPage--;
+                    renderPageIntoSlot('active', currentPage);
+                    syncHudAndBookmark();
+                    const stage = document.getElementById('interactive-book-stage');
+                    stage.classList.remove('eink-flash-anim');
+                    void stage.offsetWidth;
+                    stage.classList.add('eink-flash-anim');
+                    return;
+                }
+
+                renderPageIntoSlot('underlay', currentPage - 1);
+                animateCurlProgress(0.02, 1, 'prev', 360, () => {
+                    currentPage--;
+                    renderPageIntoSlot('active', currentPage);
+                    resetCurlLayers();
+                    syncHudAndBookmark();
+                });
+            }
+        }
+
+        // ==========================================================
+        // LISTENERS DE PONTEIRO / DEDO NO PALCO DO LIVRO (60FPS REAL-TIME)
+        // ==========================================================
+        function setupInteractivePageStage() {
+            const stage = document.getElementById('interactive-book-stage');
+
+            stage.addEventListener('pointerdown', (e) => {
+                if (dragState.isAnimating) return;
+
+                // Se clicou em um grifo/nota romântica, deixa o clique abrir a nota sem iniciar arraste
+                if (e.target.closest('.kindle-popular-highlight') || e.target.closest('.popular-highlight-caption')) {
+                    return;
+                }
+
+                dragState.isPointerDown = true;
+                dragState.isDraggingPage = false;
+                dragState.direction = null;
+                dragState.startX = e.clientX;
+                dragState.startY = e.clientY;
+                dragState.currentX = e.clientX;
+                dragState.startTime = performance.now();
+                dragState.progress = 0;
+
+                if (stage.setPointerCapture) {
+                    try { stage.setPointerCapture(e.pointerId); } catch (_) {}
+                }
+            });
+
+            stage.addEventListener('pointermove', (e) => {
+                if (!dragState.isPointerDown || dragState.isAnimating) return;
+
+                const dx = e.clientX - dragState.startX;
+                const dy = e.clientY - dragState.startY;
+                const width = stage.clientWidth || 390;
+
+                // Inicia o arraste da folha assim que o dedo move mais de 8px horizontalmente
+                if (!dragState.isDraggingPage) {
+                    if (Math.abs(dx) > 8 && Math.abs(dx) > Math.abs(dy) * 0.8) {
+                        if (dx < 0 && currentPage < pages.length - 1) {
+                            dragState.isDraggingPage = true;
+                            dragState.direction = 'next';
+                            renderPageIntoSlot('underlay', currentPage + 1);
+                            if (hudActive) setHudVisibility(false);
+                        } else if (dx > 0 && currentPage > 0) {
+                            dragState.isDraggingPage = true;
+                            dragState.direction = 'prev';
+                            renderPageIntoSlot('underlay', currentPage - 1);
+                            if (hudActive) setHudVisibility(false);
+                        }
+                    }
+                }
+
+                if (dragState.isDraggingPage && pageTurnMode !== 'eink') {
+                    dragState.currentX = e.clientX;
+                    let rawProgress = 0;
+                    if (dragState.direction === 'next') {
+                        rawProgress = Math.max(0, Math.min(0.98, -dx / (width * 0.88)));
+                    } else if (dragState.direction === 'prev') {
+                        rawProgress = Math.max(0, Math.min(0.98, dx / (width * 0.88)));
+                    }
+                    dragState.progress = rawProgress;
+                    applyCurlVisuals(rawProgress, dragState.direction);
+                }
+            });
+
+            function finishPointerGesture(e) {
+                if (!dragState.isPointerDown) return;
+                dragState.isPointerDown = false;
+
+                const dx = e.clientX - dragState.startX;
+                const elapsed = Math.max(1, performance.now() - dragState.startTime);
+                const velocityX = Math.abs(dx) / elapsed; // px/ms
+
+                // Caso 1: O usuário estava arrastando a folha com o dedo
+                if (dragState.isDraggingPage) {
+                    const dir = dragState.direction;
+                    const p = dragState.progress;
+                    dragState.isDraggingPage = false;
+
+                    if (pageTurnMode === 'eink') {
+                        if (p > 0.15 || velocityX > 0.35) {
+                            triggerAnimatedTurn(dir);
+                        }
+                        return;
+                    }
+
+                    // Se arrastou mais de 24% da tela ou fez um flick rápido (> 0.38 px/ms), completa a virada!
+                    const shouldComplete = p > 0.24 || (velocityX > 0.38 && p > 0.05);
+
+                    if (shouldComplete) {
+                        const remainingDuration = Math.max(160, Math.round((1 - p) * 320));
+                        animateCurlProgress(p, 1, dir, remainingDuration, () => {
+                            currentPage += (dir === 'next' ? 1 : -1);
+                            renderPageIntoSlot('active', currentPage);
+                            resetCurlLayers();
+                            syncHudAndBookmark();
+                        });
+                    } else {
+                        // Caso contrário, a folha volta suavemente para a página atual (efeito mola)
+                        const springBackDuration = Math.max(150, Math.round(p * 300));
+                        animateCurlProgress(p, 0, dir, springBackDuration, () => {
+                            resetCurlLayers();
+                        });
+                    }
+                    return;
+                }
+
+                // Caso 2: Foi um toque simples (Tap) nas zonas do Kindle (25% Esq | 50% Centro | 25% Dir)
+                if (Math.abs(dx) < 10) {
+                    const rect = stage.getBoundingClientRect();
+                    const relX = (e.clientX - rect.left) / rect.width;
+
+                    if (relX < 0.25) {
+                        if (hudActive) setHudVisibility(false);
+                        triggerAnimatedTurn('prev');
+                    } else if (relX > 0.75) {
+                        if (hudActive) setHudVisibility(false);
+                        triggerAnimatedTurn('next');
+                    } else {
+                        setHudVisibility(!hudActive);
+                    }
+                }
+            }
+
+            stage.addEventListener('pointerup', finishPointerGesture);
+            stage.addEventListener('pointercancel', finishPointerGesture);
+        }
+
+        function setHudVisibility(visible) {
+            hudActive = visible;
+            const viewport = document.getElementById('reader-viewport');
+            if (hudActive) {
+                viewport.classList.add('hud-visible');
+            } else {
+                viewport.classList.remove('hud-visible');
+                hideScrubberPreview();
+            }
+        }
+
+        // Scrubber Inferior com Preview Instantâneo do Capítulo e Trecho
+        function onSliderScrub(val) {
+            const target = parseInt(val, 10);
+            const targetData = pages[target];
+            if (!targetData) return;
+
+            const bubble = document.getElementById('scrubber-preview-bubble');
+            bubble.classList.remove('hidden');
+            bubble.classList.add('flex');
+            document.getElementById('preview-bubble-chap').textContent = `${targetData.chapterRoman} • ${targetData.chapterTitle}`;
+            document.getElementById('preview-bubble-pos').textContent = `Página ${target + 1} de ${pages.length}`;
+
+            const cleanSnippet = (targetData.paragraphs[0] || '').replace(/\[\[(.*?)\|(.*?)\]\]/g, '$1');
+            document.getElementById('preview-bubble-snippet').textContent = `“${cleanSnippet.slice(0, 75)}...”`;
+
+            currentPage = target;
+            renderPageIntoSlot('active', currentPage);
+            syncHudAndBookmark();
+        }
+
+        function hideScrubberPreview() {
+            const bubble = document.getElementById('scrubber-preview-bubble');
+            if (bubble) {
+                bubble.classList.add('hidden');
+                bubble.classList.remove('flex');
+            }
+        }
+
+        // Setas do teclado para testar no Desktop com a animação 3D
+        document.addEventListener('keydown', (e) => {
+            const readerVisible = !document.getElementById('reader-viewport').classList.contains('hidden');
+            if (!readerVisible) return;
+            if (e.key === 'ArrowRight') triggerAnimatedTurn('next');
+            if (e.key === 'ArrowLeft') triggerAnimatedTurn('prev');
+        });
+
+        // ==========================================================
+        // MARCADOR DE PÁGINA + MICRO-CORAÇÕES SUTIS
+        // ==========================================================
+        function togglePageBookmark(event) {
+            event.stopPropagation();
+            const pageData = pages[currentPage];
+            pageData.bookmarked = !pageData.bookmarked;
+            syncBookmarkRibbon(pageData.bookmarked);
+
+            if (pageData.bookmarked) {
+                spawnMicroHearts();
+            }
+        }
+
+        function syncBookmarkRibbon(isBookmarked) {
+            const ribbon = document.getElementById('corner-ribbon');
+            const icon = document.getElementById('hud-bookmark-icon');
+
+            if (isBookmarked) {
+                ribbon.classList.add('active');
+                icon.className = 'ph-fill ph-bookmark-simple text-lg';
+                icon.style.color = 'var(--accent-color)';
+            } else {
+                ribbon.classList.remove('active');
+                icon.className = 'ph ph-bookmark-simple text-lg';
+                icon.style.color = '';
+            }
+        }
+
+        function spawnMicroHearts() {
+            const shell = document.getElementById('kindle-app-shell');
+            const symbols = ['♥', '✦', '♡'];
+            for (let i = 0; i < 6; i++) {
+                const el = document.createElement('span');
+                el.className = 'micro-heart';
+                el.textContent = symbols[i % symbols.length];
+                el.style.color = 'var(--accent-color)';
+                el.style.right = `${18 + (Math.random() * 24 - 12)}px`;
+                el.style.top = `${42 + (Math.random() * 14)}px`;
+                el.style.fontSize = `${11 + Math.floor(Math.random() * 6)}px`;
+                shell.appendChild(el);
+                setTimeout(() => el.remove(), 2000);
+            }
+        }
+
+        // ==========================================================
+        // GERENCIAMENTO DE BOTTOM SHEETS ("Aa", NOTAS, SUMÁRIO, EDITOR)
+        // ==========================================================
+        function openSheet(sheetId) {
+            if (sheetId === 'toc-sheet') populateTocSheet();
+            if (sheetId === 'notes-sheet') populateNotesSheet();
+            document.getElementById(sheetId).classList.add('open');
+        }
+
+        function closeSheet(sheetId) {
+            document.getElementById(sheetId).classList.remove('open');
+        }
+
+        function openHighlightNote(encodedQuote, encodedNote, event) {
+            if (event) event.stopPropagation();
+            const quote = decodeURIComponent(encodedQuote);
+            const note = decodeURIComponent(encodedNote);
+
+            document.getElementById('sheet-highlight-meta').textContent = `Destacado por 1 pessoa (${bookMeta.author})`;
+            document.getElementById('sheet-highlight-quote').textContent = `“${quote}”`;
+            document.getElementById('sheet-highlight-note').textContent = note;
+
+            openSheet('highlight-note-sheet');
+        }
+
+        function populateTocSheet() {
+            const container = document.getElementById('toc-items-container');
+            const seenChapters = new Set();
+            const items = [];
+
+            pages.forEach((p, pageIdx) => {
+                if (!seenChapters.has(p.chapterIndex)) {
+                    seenChapters.add(p.chapterIndex);
+                    items.push({ ...p, pageIdx });
+                }
+            });
+
+            container.innerHTML = items.map(item => {
+                const isCurrent = pages[currentPage].chapterIndex === item.chapterIndex;
+                return `
+                    <button onclick="jumpToPageFromSheet(${item.pageIdx}, 'toc-sheet')"
+                            class="w-full text-left p-3.5 rounded-2xl border flex items-center justify-between transition-all active:scale-[0.99]"
+                            style="background-color: var(--bg-page); border-color: ${isCurrent ? 'var(--accent-color)' : 'var(--border-color)'};">
+                        <div>
+                            <span class="text-[10px] uppercase tracking-widest font-semibold block" style="color: var(--accent-color);">
+                                ${item.chapterRoman}
+                            </span>
+                            <span class="serif-display text-lg font-bold">${item.chapterTitle}</span>
+                        </div>
+                        <span class="text-xs px-2.5 py-1 rounded-full border" style="border-color: var(--border-color); color: var(--text-muted);">
+                            Pág. ${item.pageIdx + 1}
+                        </span>
+                    </button>
+                `;
+            }).join('');
+        }
+
+        function populateNotesSheet() {
+            const container = document.getElementById('all-notes-container');
+            const highlights = [];
+            const regex = /\[\[(.*?)\|(.*?)\]\]/g;
+
+            pages.forEach((p, pageIdx) => {
+                p.paragraphs.forEach(para => {
+                    let match;
+                    while ((match = regex.exec(para)) !== null) {
+                        highlights.push({
+                            quote: match[1],
+                            note: match[2],
+                            chapterTitle: p.chapterTitle,
+                            pageIdx
+                        });
+                    }
+                });
+            });
+
+            if (highlights.length === 0) {
+                container.innerHTML = `<p class="text-xs text-center py-8" style="color: var(--text-muted);">Nenhum destaque adicionado ainda.</p>`;
+                return;
+            }
+
+            container.innerHTML = highlights.map(h => `
+                <div onclick="jumpToPageFromSheet(${h.pageIdx}, 'notes-sheet')"
+                     class="p-4 rounded-2xl border space-y-2 cursor-pointer active:scale-[0.99] transition-transform"
+                     style="background-color: var(--bg-page); border-color: var(--border-color);">
+                    <div class="flex items-center justify-between text-[10px] uppercase tracking-wider" style="color: var(--text-muted);">
+                        <span>${h.chapterTitle}</span>
+                        <span>Página ${h.pageIdx + 1}</span>
+                    </div>
+                    <blockquote class="text-xs italic pl-2.5 border-l-2" style="border-color: var(--highlight-border); color: var(--text-muted);">
+                        “${h.quote}”
+                    </blockquote>
+                    <p class="serif-display text-base pt-1" style="color: var(--text-main);">
+                        <strong class="text-[10px] uppercase tracking-wider font-sans mr-1" style="color: var(--accent-color);">Nota de ${bookMeta.author}:</strong>
+                        ${h.note}
+                    </p>
+                </div>
+            `).join('');
+        }
+
+        function jumpToPageFromSheet(targetIdx, sheetId) {
+            closeSheet(sheetId);
+            setHudVisibility(false);
+            currentPage = targetIdx;
+            renderPageIntoSlot('active', currentPage);
+            resetCurlLayers();
+            syncHudAndBookmark();
+        }
+
+        // ==========================================================
+        // CONTROLES DO MENU "Aa" (MODO DE VIRADA, TEMAS, FONTES, TAMANHO, MARGENS E BRILHO)
+        // ==========================================================
+        function setTurnMode(mode) {
+            pageTurnMode = mode;
+            ['curl', 'slide', 'eink'].forEach(m => {
+                const btn = document.getElementById(`btn-mode-${m}`);
+                btn.style.borderWidth = m === mode ? '2px' : '1px';
+                btn.style.borderColor = m === mode ? 'var(--accent-color)' : 'var(--border-color)';
+            });
+        }
+
+        function applyTheme(theme) {
+            if (theme === 'sepia') {
+                document.documentElement.removeAttribute('data-theme');
+            } else {
+                document.documentElement.setAttribute('data-theme', theme);
+            }
+
+            ['light', 'sepia', 'green', 'dark'].forEach(t => {
+                const btn = document.getElementById(`btn-theme-${t}`);
+                btn.style.borderWidth = t === theme ? '2px' : '1px';
+                btn.style.borderColor = t === theme ? 'var(--accent-color)' : 'var(--border-color)';
+            });
+        }
+
+        function applyFontFamily(type) {
+            const map = {
+                bookerly: "'Literata', Georgia, serif",
+                romantic: "'Lora', Georgia, serif",
+                sans: "'Inter', -apple-system, sans-serif"
+            };
+            document.documentElement.style.setProperty('--reader-font', map[type]);
+
+            ['bookerly', 'romantic', 'sans'].forEach(f => {
+                const btn = document.getElementById(`btn-font-${f}`);
+                btn.style.borderColor = f === type ? 'var(--accent-color)' : 'var(--border-color)';
+                btn.style.borderWidth = f === type ? '2px' : '1px';
+            });
+        }
+
+        function stepFontSize(delta) {
+            fontStepIndex = Math.max(0, Math.min(FONT_STEPS.length - 1, fontStepIndex + delta));
+            document.documentElement.style.setProperty('--reader-font-size', FONT_STEPS[fontStepIndex]);
+        }
+
+        function applyMargins(marginVal) {
+            document.documentElement.style.setProperty('--reader-margin-x', marginVal);
+        }
+
+        function applyBrightness(val) {
+            document.documentElement.style.setProperty('--screen-brightness', val);
+        }
+
+        // ==========================================================
+        // EDITOR / COLAR TEXTO DO USUÁRIO (PAGINAÇÃO AUTOMÁTICA)
+        // ==========================================================
+        function openEditorSheet() {
+            document.getElementById('input-book-title').value = bookMeta.title;
+            document.getElementById('input-book-author').value = bookMeta.author;
+            document.getElementById('input-full-story').value = rawStoryText;
+            openSheet('editor-sheet');
+        }
+
+        function saveCustomStory() {
+            const newTitle = document.getElementById('input-book-title').value.trim();
+            const newAuthor = document.getElementById('input-book-author').value.trim();
+            const newStory = document.getElementById('input-full-story').value.trim();
+
+            if (newTitle) bookMeta.title = newTitle;
+            if (newAuthor) bookMeta.author = newAuthor;
+            if (newStory) rawStoryText = newStory;
+
+            localStorage.setItem('kindle_mobile_meta', JSON.stringify(bookMeta));
+            localStorage.setItem('kindle_mobile_raw_story', rawStoryText);
+
+            syncMetadataUI();
+            buildPaginatedBook(rawStoryText);
+            currentPage = 0;
+            renderPageIntoSlot('active', currentPage);
+            resetCurlLayers();
+            syncHudAndBookmark();
+            closeSheet('editor-sheet');
+            setHudVisibility(false);
+        }
+
+        function restoreDefaultStory() {
+            bookMeta = { ...DEFAULT_METADATA };
+            rawStoryText = DEFAULT_RAW_STORY;
+            localStorage.removeItem('kindle_mobile_meta');
+            localStorage.removeItem('kindle_mobile_raw_story');
+
+            syncMetadataUI();
+            buildPaginatedBook(rawStoryText);
+            currentPage = 0;
+            renderPageIntoSlot('active', currentPage);
+            resetCurlLayers();
+            syncHudAndBookmark();
+            closeSheet('editor-sheet');
+        }
+
+        function copyPageLink() {
+            const url = window.location.href.startsWith('http') ? window.location.href : 'https://vercel.com/new';
+            const tempInput = document.createElement('input');
+            tempInput.value = url;
+            document.body.appendChild(tempInput);
+            tempInput.select();
+            document.execCommand('copy');
+            document.body.removeChild(tempInput);
+
+            const btn = document.getElementById('btn-copy-link');
+            btn.textContent = 'Copiado! ✓';
+            setTimeout(() => { btn.textContent = 'Copiar Link'; }, 2000);
+        }
+
+        // Inicialização ao carregar
+        window.addEventListener('DOMContentLoaded', () => {
+            syncMetadataUI();
+            buildPaginatedBook(rawStoryText);
+            setupInteractivePageStage();
+            if (window.location.href.startsWith('http')) {
+                const urlSpan = document.getElementById('current-share-url');
+                if (urlSpan) urlSpan.textContent = window.location.href;
+            }
+        });
+    </script>
+</body>
+</html>
