@@ -12,8 +12,7 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- Google Fonts: Literata (Bookerly-like), Lora (Romântica), Inter (UI & Sans) e Cormorant Garamond (Capa) -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,400;1,600&family=Inter:wght@400;500;600&family=Literata:ital,opsz,wght@0,7..72,400;0,7..72,500;0,7..72,600;1,7..72,400&family=Lora:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@500;600;700&family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,400;1,600&family=Inter:wght@400;500;600&family=Literata:ital,opsz,wght@0,7..72,400;0,7..72,500;0,7..72,600;1,7..72,400&family=Lora:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">
     <!-- Phosphor Icons -->
     <script src="https://unpkg.com/@phosphor-icons/web"></script>
 
@@ -206,6 +205,126 @@
             cursor: pointer;
             z-index: 35;
             position: relative;
+        }
+
+        /* ==========================================================
+           ESTILO FOTO POLAROID ROMÂNTICA (ÁLBUM DE MEMÓRIAS)
+           ========================================================== */
+        .polaroid-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+            padding: 8px 4px 6px 4px;
+            position: relative;
+            z-index: 28;
+        }
+
+        .polaroid-card {
+            position: relative;
+            background-color: #FFFFFF;
+            color: #231C18;
+            padding: 8px 8px 18px 8px;
+            border-radius: 2px;
+            box-shadow: 0 8px 22px rgba(0, 0, 0, 0.16), 0 2px 6px rgba(0, 0, 0, 0.10);
+            max-width: 255px;
+            width: 86%;
+            transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.25s ease;
+            cursor: pointer;
+            user-select: none;
+            -webkit-user-select: none;
+            border: 1px solid rgba(0, 0, 0, 0.06);
+        }
+
+        .polaroid-card:hover {
+            transform: scale(1.025) rotate(0deg) !important;
+            box-shadow: 0 14px 28px rgba(0, 0, 0, 0.24), 0 4px 10px rgba(0, 0, 0, 0.12);
+        }
+
+        .polaroid-card:active {
+            transform: scale(0.98) !important;
+        }
+
+        /* Fita Adesiva / Washi Tape autêntica no topo */
+        .polaroid-tape {
+            position: absolute;
+            top: -9px;
+            left: 50%;
+            transform: translateX(-50%) rotate(-1.5deg);
+            width: 66px;
+            height: 18px;
+            background-color: rgba(255, 252, 242, 0.76);
+            border-left: 2px dashed rgba(160, 140, 120, 0.4);
+            border-right: 2px dashed rgba(160, 140, 120, 0.4);
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12);
+            backdrop-filter: blur(2px);
+            z-index: 10;
+            pointer-events: none;
+        }
+
+        /* Área da Imagem */
+        .polaroid-photo-box {
+            width: 100%;
+            height: 172px;
+            overflow: hidden;
+            background-color: #f2ede4;
+            position: relative;
+            border-radius: 1px;
+            box-shadow: inset 0 0 4px rgba(0, 0, 0, 0.15);
+        }
+
+        .polaroid-photo-box img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+            pointer-events: none;
+        }
+
+        /* Legenda Manuscrita Estilo Polaroid */
+        .polaroid-caption {
+            font-family: 'Caveat', 'Cormorant Garamond', cursive;
+            font-size: 1.25rem;
+            font-weight: 600;
+            line-height: 1.2;
+            text-align: center;
+            color: #2C221E;
+            margin-top: 8px;
+            padding: 0 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 4px;
+        }
+
+        .polaroid-caption .caption-heart {
+            color: var(--accent-color);
+            font-size: 0.95rem;
+            display: inline-block;
+        }
+
+        .polaroid-zoom-hint {
+            position: absolute;
+            bottom: 4px;
+            right: 6px;
+            font-size: 8px;
+            color: rgba(60, 50, 45, 0.4);
+            font-family: 'Inter', sans-serif;
+            display: flex;
+            align-items: center;
+            gap: 2px;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .tilt-left {
+            transform: rotate(-2deg);
+        }
+        .tilt-right {
+            transform: rotate(2deg);
+        }
+        .tilt-subtle {
+            transform: rotate(-0.8deg);
         }
 
         /* ==========================================================
@@ -1000,22 +1119,45 @@
                     </div>
 
                     <div>
-                        <label class="block font-medium mb-1" style="color: var(--text-muted);">
-                            Texto Completo <span class="opacity-70">(Separe parágrafos com linha em branco)</span>
-                        </label>
+                        <div class="flex items-center justify-between mb-1.5">
+                            <label class="block font-medium" style="color: var(--text-muted);">
+                                Texto Completo <span class="opacity-70">(Separe parágrafos com linha)</span>
+                            </label>
+                            
+                            <!-- Botões de Inserção de Foto Polaroid -->
+                            <div class="flex items-center gap-1.5">
+                                <button type="button" onclick="triggerPhotoUpload()"
+                                        class="px-2 py-1 rounded-lg border text-[11px] font-medium flex items-center gap-1 active:scale-95 transition-all shadow-xs"
+                                        style="border-color: var(--border-color); background-color: var(--sheet-bg); color: var(--accent-color);"
+                                        title="Carregar foto do dispositivo e inserir como Polaroid">
+                                    <i class="ph-bold ph-camera"></i> + Foto (PC/Celular)
+                                </button>
+                                <button type="button" onclick="promptPhotoUrl()"
+                                        class="px-2 py-1 rounded-lg border text-[11px] font-medium flex items-center gap-1 active:scale-95 transition-all shadow-xs"
+                                        style="border-color: var(--border-color); background-color: var(--sheet-bg); color: var(--text-muted);"
+                                        title="Inserir foto através de um link da internet">
+                                    <i class="ph-bold ph-link"></i> Link URL
+                                </button>
+                            </div>
+                        </div>
+
+                        <input type="file" id="polaroid-file-input" accept="image/*" class="hidden" onchange="handlePhotoFileSelected(event)">
+
                         <textarea id="input-full-story" rows="8"
                                   placeholder="Cole aqui o seu texto romântico..."
-                                  class="w-full p-3 rounded-xl border bg-transparent leading-relaxed thin-scroll"
+                                  class="w-full p-3 rounded-xl border bg-transparent leading-relaxed thin-scroll font-mono text-[11px]"
                                   style="border-color: var(--border-color); color: var(--text-main);"></textarea>
                     </div>
 
-                    <div class="p-3 rounded-xl border space-y-1" style="border-color: var(--border-color); background-color: var(--bg-page);">
+                    <div class="p-3 rounded-xl border space-y-1.5" style="border-color: var(--border-color); background-color: var(--bg-page);">
                         <p class="font-semibold flex items-center gap-1" style="color: var(--accent-color);">
-                            <i class="ph-fill ph-sparkle"></i> Dica de Formatação Kindle:
+                            <i class="ph-fill ph-sparkle"></i> Dicas de Formatação do Livro:
                         </p>
-                        <p style="color: var(--text-muted);">
-                            • Para criar um novo capítulo, comece uma linha com <code class="px-1 py-0.5 rounded bg-black/10"># Nome do Capítulo</code><br>
-                            • Para grifar uma frase com nota, use <code class="px-1 py-0.5 rounded bg-black/10">[[frase destacada|sua nota romântica]]</code>
+                        <p style="color: var(--text-muted); line-height: 1.5;">
+                            • <strong>Novo Capítulo:</strong> comece uma linha com <code class="px-1 py-0.5 rounded bg-black/10"># Nome do Capítulo</code><br>
+                            • <strong>Foto Polaroid:</strong> use os botões <code>+ Foto</code> acima ou escreva <code class="px-1 py-0.5 rounded bg-black/10">![Legenda da Foto](link-da-imagem)</code><br>
+                            • <strong>Página Exclusiva de Foto:</strong> coloque <code class="px-1 py-0.5 rounded bg-black/10">---</code> antes e depois da foto<br>
+                            • <strong>Nota do Autor:</strong> use <code class="px-1 py-0.5 rounded bg-black/10">[[frase destacada|sua nota romântica]]</code>
                         </p>
                     </div>
                 </div>
@@ -1080,6 +1222,24 @@
                     </div>
                 </div>
             </div>
+        <!-- ==========================================================
+             9. MODAL LIGHTBOX DE FOTO POLAROID EM TELA CHEIA
+             ========================================================== -->
+        <div id="polaroid-lightbox" onclick="closePolaroidModal()" class="bottom-sheet-backdrop fixed inset-0 bg-black/85 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+            <div onclick="event.stopPropagation()" class="relative max-w-[360px] w-full bg-[#FAF7F2] p-4 pb-5 rounded-2xl shadow-2xl flex flex-col items-center border" style="border-color: var(--border-color);">
+                <button onclick="closePolaroidModal()" class="absolute top-3 right-3 w-8 h-8 rounded-full bg-black/10 flex items-center justify-center text-black/70 hover:bg-black/20 active:scale-95 transition-all z-20" title="Fechar">
+                    <i class="ph-bold ph-x text-base"></i>
+                </button>
+                
+                <div class="w-full max-h-[58vh] rounded-xl overflow-hidden shadow-inner bg-black/5 mb-3 flex items-center justify-center">
+                    <img id="lightbox-img" src="" alt="Foto" class="max-h-[58vh] w-full object-contain rounded-lg">
+                </div>
+                
+                <p id="lightbox-caption" class="text-2xl font-bold text-center text-[#2C221E] px-2 leading-snug" style="font-family: 'Caveat', cursive;"></p>
+                <span class="text-[10px] uppercase tracking-wider text-black/50 mt-1 flex items-center gap-1">
+                    <i class="ph-fill ph-heart" style="color: var(--accent-color);"></i> Memória Guardada com Amor
+                </span>
+            </div>
         </div>
 
     </div>
@@ -1103,9 +1263,13 @@
 
 Existem momentos na vida que dividem a nossa história em um “antes” e um “depois”. Antes de você chegar, os dias seguiam um ritmo comum, mas desde o instante em que os nossos caminhos se cruzaram, [[tudo ganhou uma cor, uma música e um sentido completamente novo|Eu ainda me lembro exatamente do frio na barriga e do sorriso bobo que você colocou no meu rosto desde o nosso primeiro encontro.]].
 
-Este livro digital foi desenhado como o seu Kindle favorito para guardar em páginas eternas tudo o que você representa para mim. Aqui cada palavra foi escolhida pensando no brilho dos seus olhos.
+---
+
+![O começo da nossa história inesquecível ❤️](https://images.unsplash.com/photo-1516589178581-6cd7833ae3b2?auto=format&fit=crop&w=700&q=80)
 
 ---
+
+Este livro digital foi desenhado como o seu Kindle favorito para guardar em páginas eternas tudo o que você representa para mim. Aqui cada palavra foi escolhida pensando no brilho dos seus olhos.
 
 Quando olho para trás e vejo como cada detalhe nos trouxe até aqui, tenho ainda mais certeza de que o destino caprichou quando escreveu o nosso encontro. [[Você se tornou a minha página favorita de todos os dias|Não importa quão corrido seja o dia, conversar com você e te abraçar é sempre o momento em que meu coração encontra paz.]].
 
@@ -1115,23 +1279,43 @@ Continue arrastando a folha com o dedo ou tocando na lateral direita da tela: ca
 
 Se me pedissem para sublinhar as partes mais bonitas da minha rotina, todas elas teriam o seu nome. É impressionante como um simples olhar seu ou [[o som da sua risada consegue iluminar qualquer ambiente no mesmo segundo|Sério, a sua risada é oficialmente a minha trilha sonora favorita no mundo inteiro. ❤️]].
 
-Admiro a sua doçura, a sua força, o jeito carinhoso como você cuida de quem ama e como transforma momentos simples em memórias inesquecíveis.
+---
+
+![O sorriso que ilumina todos os meus dias ✨](https://images.unsplash.com/photo-1522673607200-164d1b6ce486?auto=format&fit=crop&w=700&q=80)
 
 ---
 
-Amar você é descobrir todos os dias que a felicidade mora nos pequenos detalhes: no nosso jeito de conversar pelo olhar, nas nossas piadas internas e [[na sensação única de estar em casa sempre que estou dentro do seu abraço|O seu abraço é o lugar mais seguro e aconchegante que existe para mim.]].
+Admiro a sua doçura, a sua força, o jeito carinhoso como você cuida de quem ama e como transforma momentos simples em memórias inesquecíveis.
 
-Este espaço está pronto para receber o texto completo que estou escrevendo especialmente para você.
+Amar você é descobrir todos os dias que a felicidade mora nos pequenos detalhes: no nosso jeito de conversar pelo olhar, nas nossas piadas internas e [[na sensação única de estar em casa sempre que estou dentro do seu abraço|O seu abraço é o lugar mais seguro e aconchegante que existe para mim.]].
 
 # Para Todos os Próximos Capítulos
 
 Diferente dos livros comuns que terminam na última página, a nossa história é uma obra viva que continuamos escrevendo juntos. Ainda temos milhares de páginas em branco esperando pelas nossas próximas viagens, sonhos e conquistas.
 
+---
+
+![Para sempre a minha melhor escolha ♾️](https://images.unsplash.com/photo-1515934751635-c81c6bc9a2d8?auto=format&fit=crop&w=700&q=80)
+
+---
+
 Obrigado por ser minha parceira, minha melhor amiga e o grande amor da minha vida. [[Eu escolheria você em todas as versões possíveis do universo, em todos os livros e em todas as vidas|Eu te amo hoje, amanhã e em todas as páginas que ainda vamos viver juntos! Para sempre seu.]].`;
 
         // Estado Global do Leitor Kindle
+        const APP_STORY_VERSION = 'v2_polaroids';
         let bookMeta = JSON.parse(localStorage.getItem('kindle_mobile_meta')) || { ...DEFAULT_METADATA };
-        let rawStoryText = localStorage.getItem('kindle_mobile_raw_story') || DEFAULT_RAW_STORY;
+        let storedStory = localStorage.getItem('kindle_mobile_raw_story');
+        let currentVersion = localStorage.getItem('kindle_mobile_version');
+
+        let rawStoryText;
+        if (!storedStory || (!currentVersion && storedStory.indexOf('images.unsplash.com') === -1 && storedStory.indexOf('# O Dia em que Tudo Mudou') !== -1)) {
+            rawStoryText = DEFAULT_RAW_STORY;
+            localStorage.setItem('kindle_mobile_version', APP_STORY_VERSION);
+            localStorage.setItem('kindle_mobile_raw_story', rawStoryText);
+        } else {
+            rawStoryText = storedStory;
+        }
+
         let pages = [];
         let currentPage = 0;
         let hudActive = false;
@@ -1145,11 +1329,36 @@ Obrigado por ser minha parceira, minha melhor amiga e o grande amor da minha vid
         const FONT_STEPS = ['0.96rem', '1.06rem', '1.16rem', '1.26rem', '1.38rem'];
 
         // ==========================================================
-        // CONVERSOR DE TEXTO EM PÁGINAS DE TAMANHO MOBILE (SEM SCROLL)
+        // PARSER & CONVERSOR DE TEXTO / POLAROIDS EM PÁGINAS KINDLE
         // ==========================================================
         function toRoman(num) {
             const romans = ["I", "II", "III", "IV", "V", "VI", "VII", "VIII", "IX", "X", "XI", "XII"];
             return romans[num - 1] || num;
+        }
+
+        /**
+         * Detecta fotos no texto em formato Markdown `![Legenda](url)`
+         * ou formato tag `[foto: url | legenda]` / `[polaroid: url | legenda]`
+         */
+        function parsePolaroid(text) {
+            if (!text) return null;
+            const mdMatch = text.match(/^!\[(.*?)\]\((.*?)\)$/);
+            if (mdMatch) {
+                return {
+                    type: 'polaroid',
+                    caption: mdMatch[1].trim(),
+                    src: mdMatch[2].trim()
+                };
+            }
+            const tagMatch = text.match(/^\[(?:foto|polaroid):\s*([^\|\]]+)(?:\s*\|\s*([^\]]+))?\]$/i);
+            if (tagMatch) {
+                return {
+                    type: 'polaroid',
+                    src: tagMatch[1].trim(),
+                    caption: (tagMatch[2] || '').trim()
+                };
+            }
+            return null;
         }
 
         function buildPaginatedBook(rawText) {
@@ -1163,6 +1372,8 @@ Obrigado por ser minha parceira, minha melhor amiga e o grande amor da minha vid
             let buffer = [];
             lines.forEach(line => {
                 const trimmed = line.trim();
+                const photoMatch = parsePolaroid(trimmed);
+
                 if (trimmed.startsWith('# ')) {
                     if (buffer.length > 0) {
                         currentChap.paragraphs.push(buffer.join(' '));
@@ -1181,6 +1392,12 @@ Obrigado por ser minha parceira, minha melhor amiga e o grande amor da minha vid
                         buffer = [];
                     }
                     currentChap.paragraphs.push('__PAGE_BREAK__');
+                } else if (photoMatch) {
+                    if (buffer.length > 0) {
+                        currentChap.paragraphs.push(buffer.join(' '));
+                        buffer = [];
+                    }
+                    currentChap.paragraphs.push(photoMatch);
                 } else if (trimmed === '') {
                     if (buffer.length > 0) {
                         currentChap.paragraphs.push(buffer.join(' '));
@@ -1200,39 +1417,52 @@ Obrigado por ser minha parceira, minha melhor amiga e o grande amor da minha vid
                 let charCount = 0;
                 let isFirstPageOfChap = true;
 
+                function pushCurrentPage() {
+                    if (pageParas.length === 0) return;
+                    generatedPages.push({
+                        chapterIndex: cIdx,
+                        chapterRoman: `CAPÍTULO ${toRoman(cIdx + 1)}`,
+                        chapterTitle: chap.title,
+                        isChapterStart: isFirstPageOfChap,
+                        paragraphs: [...pageParas],
+                        bookmarked: false
+                    });
+                    pageParas = [];
+                    charCount = 0;
+                    isFirstPageOfChap = false;
+                }
+
                 chap.paragraphs.forEach(para => {
                     if (para === '__PAGE_BREAK__') {
+                        pushCurrentPage();
+                        return;
+                    }
+
+                    if (typeof para === 'object' && para.type === 'polaroid') {
                         if (pageParas.length > 0) {
-                            generatedPages.push({
-                                chapterIndex: cIdx,
-                                chapterRoman: `CAPÍTULO ${toRoman(cIdx + 1)}`,
-                                chapterTitle: chap.title,
-                                isChapterStart: isFirstPageOfChap,
-                                paragraphs: pageParas,
-                                bookmarked: false
-                            });
-                            pageParas = [];
-                            charCount = 0;
-                            isFirstPageOfChap = false;
+                            pushCurrentPage();
+                        }
+                        pageParas.push(para);
+                        charCount += 260;
+
+                        if (isFirstPageOfChap) {
+                            pushCurrentPage();
                         }
                         return;
                     }
 
                     const cleanLen = para.replace(/\[\[(.*?)\|(.*?)\]\]/g, '$1').length;
                     const maxCharsPerPage = isFirstPageOfChap ? 420 : 520;
+                    const hasPolaroid = pageParas.some(p => typeof p === 'object' && p.type === 'polaroid');
 
-                    if (pageParas.length > 0 && (charCount + cleanLen > maxCharsPerPage || pageParas.length >= 2)) {
-                        generatedPages.push({
-                            chapterIndex: cIdx,
-                            chapterRoman: `CAPÍTULO ${toRoman(cIdx + 1)}`,
-                            chapterTitle: chap.title,
-                            isChapterStart: isFirstPageOfChap,
-                            paragraphs: pageParas,
-                            bookmarked: false
-                        });
+                    const shouldBreak = hasPolaroid
+                        ? (pageParas.length >= 2 || cleanLen > 180)
+                        : (charCount + cleanLen > maxCharsPerPage || pageParas.length >= 2);
+
+                    if (pageParas.length > 0 && shouldBreak) {
+                        pushCurrentPage();
                         pageParas = [para];
                         charCount = cleanLen;
-                        isFirstPageOfChap = false;
                     } else {
                         pageParas.push(para);
                         charCount += cleanLen;
@@ -1240,14 +1470,7 @@ Obrigado por ser minha parceira, minha melhor amiga e o grande amor da minha vid
                 });
 
                 if (pageParas.length > 0) {
-                    generatedPages.push({
-                        chapterIndex: cIdx,
-                        chapterRoman: `CAPÍTULO ${toRoman(cIdx + 1)}`,
-                        chapterTitle: chap.title,
-                        isChapterStart: isFirstPageOfChap,
-                        paragraphs: pageParas,
-                        bookmarked: false
-                    });
+                    pushCurrentPage();
                 }
             });
 
@@ -1355,9 +1578,41 @@ Obrigado por ser minha parceira, minha melhor amiga e o grande amor da minha vid
                 headingBlock.classList.add('hidden');
             }
 
-            // Parágrafos
+            // Parágrafos e Fotos Polaroid
             const parasContainer = document.getElementById(`${slotPrefix}-paragraphs`);
             parasContainer.innerHTML = pageData.paragraphs.map((p, idx) => {
+                if (typeof p === 'object' && p.type === 'polaroid') {
+                    const tilts = ['tilt-left', 'tilt-right', 'tilt-subtle'];
+                    const tiltClass = tilts[(pageIdx + idx) % tilts.length];
+                    const safeCaption = (p.caption || '').replace(/"/g, '&quot;');
+                    const encodedSrc = encodeURIComponent(p.src);
+                    const encodedCap = encodeURIComponent(p.caption || '');
+
+                    const clickAttr = isInteractive
+                        ? `onclick="openPolaroidModal('${encodedSrc}', '${encodedCap}', event)"`
+                        : '';
+
+                    return `
+                        <div class="polaroid-container">
+                            <div class="polaroid-card ${tiltClass}" ${clickAttr} title="Toque para ver a foto ampliada">
+                                <div class="polaroid-tape"></div>
+                                <div class="polaroid-photo-box">
+                                    <img src="${p.src}" alt="${safeCaption}" loading="lazy" onerror="this.onerror=null; this.parentElement.innerHTML='<div class=\\'w-full h-full flex flex-col items-center justify-center bg-stone-100 text-stone-400 p-2 text-center\\'><i class=\\'ph-duotone ph-image text-2xl mb-1\\'></i><span class=\\'text-[10px]\\'>Foto indisponível</span></div>';" />
+                                </div>
+                                ${p.caption ? `
+                                    <div class="polaroid-caption">
+                                        <span>${p.caption}</span>
+                                        <i class="ph-fill ph-heart caption-heart"></i>
+                                    </div>
+                                ` : ''}
+                                <div class="polaroid-zoom-hint">
+                                    <i class="ph-bold ph-magnifying-glass-plus"></i> ampliar
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                }
+
                 const isDropCap = pageData.isChapterStart && idx === 0;
                 const paraClass = isDropCap ? 'drop-cap' : 'indent-5';
                 return `<p class="${paraClass}">${formatPopularHighlights(p, isInteractive)}</p>`;
@@ -1717,6 +1972,10 @@ Obrigado por ser minha parceira, minha melhor amiga e o grande amor da minha vid
 
                 // Caso 2: Foi um toque simples (Tap) nas zonas do Kindle (25% Esq | 50% Centro | 25% Dir)
                 if (Math.abs(dx) < 10) {
+                    // Se clicou em uma foto polaroid ou grifo, não aciona virada nem menu
+                    if (e.target.closest('.polaroid-card') || e.target.closest('.polaroid-container') || e.target.closest('.kindle-popular-highlight') || e.target.closest('.popular-highlight-caption')) {
+                        return;
+                    }
                     const rect = stage.getBoundingClientRect();
                     const relX = (e.clientX - rect.left) / rect.width;
 
@@ -1759,7 +2018,13 @@ Obrigado por ser minha parceira, minha melhor amiga e o grande amor da minha vid
             document.getElementById('preview-bubble-chap').textContent = `${targetData.chapterRoman} • ${targetData.chapterTitle}`;
             document.getElementById('preview-bubble-pos').textContent = `Página ${target + 1} de ${pages.length}`;
 
-            const cleanSnippet = (targetData.paragraphs[0] || '').replace(/\[\[(.*?)\|(.*?)\]\]/g, '$1');
+            const firstPara = targetData.paragraphs[0];
+            let cleanSnippet = '';
+            if (typeof firstPara === 'object' && firstPara.type === 'polaroid') {
+                cleanSnippet = `📷 Foto: ${firstPara.caption || 'Memória em Polaroid'}`;
+            } else {
+                cleanSnippet = (firstPara || '').replace(/\[\[(.*?)\|(.*?)\]\]/g, '$1');
+            }
             document.getElementById('preview-bubble-snippet').textContent = `“${cleanSnippet.slice(0, 75)}...”`;
 
             currentPage = target;
@@ -1892,6 +2157,7 @@ Obrigado por ser minha parceira, minha melhor amiga e o grande amor da minha vid
 
             pages.forEach((p, pageIdx) => {
                 p.paragraphs.forEach(para => {
+                    if (typeof para !== 'string') return;
                     let match;
                     while ((match = regex.exec(para)) !== null) {
                         highlights.push({
@@ -2028,6 +2294,7 @@ Obrigado por ser minha parceira, minha melhor amiga e o grande amor da minha vid
             rawStoryText = DEFAULT_RAW_STORY;
             localStorage.removeItem('kindle_mobile_meta');
             localStorage.removeItem('kindle_mobile_raw_story');
+            localStorage.setItem('kindle_mobile_version', APP_STORY_VERSION);
 
             syncMetadataUI();
             buildPaginatedBook(rawStoryText);
@@ -2051,6 +2318,121 @@ Obrigado por ser minha parceira, minha melhor amiga e o grande amor da minha vid
             btn.textContent = 'Copiado! ✓';
             setTimeout(() => { btn.textContent = 'Copiar Link'; }, 2000);
         }
+
+        // ==========================================================
+        // CONTROLE DA FOTO POLAROID (AMPLIAÇÃO / LIGHTBOX & UPLOAD)
+        // ==========================================================
+        function openPolaroidModal(encodedSrc, encodedCaption, event) {
+            if (event) event.stopPropagation();
+            const src = decodeURIComponent(encodedSrc);
+            const caption = decodeURIComponent(encodedCaption);
+
+            const modal = document.getElementById('polaroid-lightbox');
+            const img = document.getElementById('lightbox-img');
+            const capEl = document.getElementById('lightbox-caption');
+
+            img.src = src;
+            capEl.textContent = caption || '';
+            modal.classList.add('open');
+        }
+
+        function closePolaroidModal() {
+            const modal = document.getElementById('polaroid-lightbox');
+            modal.classList.remove('open');
+        }
+
+        function triggerPhotoUpload() {
+            document.getElementById('polaroid-file-input').click();
+        }
+
+        function handlePhotoFileSelected(event) {
+            const file = event.target.files && event.target.files[0];
+            if (!file) return;
+            event.target.value = '';
+
+            const caption = prompt('Digite uma legenda para a sua foto Polaroid (ou deixe em branco):', 'Nossa melhor memória ❤️');
+            if (caption === null) return;
+
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const img = new Image();
+                img.onload = function() {
+                    const canvas = document.createElement('canvas');
+                    const MAX_SIZE = 900;
+                    let w = img.width;
+                    let h = img.height;
+                    if (w > MAX_SIZE || h > MAX_SIZE) {
+                        if (w > h) {
+                            h = Math.round((h * MAX_SIZE) / w);
+                            w = MAX_SIZE;
+                        } else {
+                            w = Math.round((w * MAX_SIZE) / h);
+                            h = MAX_SIZE;
+                        }
+                    }
+                    canvas.width = w;
+                    canvas.height = h;
+                    const ctx = canvas.getContext('2d');
+                    ctx.drawImage(img, 0, 0, w, h);
+                    const compressedBase64 = canvas.toDataURL('image/jpeg', 0.82);
+
+                    insertPhotoTagIntoTextarea(caption.trim(), compressedBase64);
+                };
+                img.src = e.target.result;
+            };
+            reader.readAsDataURL(file);
+        }
+
+        function promptPhotoUrl() {
+            const url = prompt('Cole aqui o link direto da imagem (URL da internet):', 'https://');
+            if (!url || url === 'https://') return;
+
+            const caption = prompt('Digite uma legenda para a sua foto Polaroid (ou deixe em branco):', 'Nossa melhor memória ❤️');
+            if (caption === null) return;
+
+            insertPhotoTagIntoTextarea(caption.trim(), url.trim());
+        }
+
+        function insertPhotoTagIntoTextarea(caption, url) {
+            const textarea = document.getElementById('input-full-story');
+            const photoTag = `\n\n---\n![${caption}](${url})\n---\n\n`;
+
+            const startPos = textarea.selectionStart;
+            const endPos = textarea.selectionEnd;
+
+            if (startPos !== undefined && endPos !== undefined) {
+                const before = textarea.value.substring(0, startPos);
+                const after = textarea.value.substring(endPos);
+                textarea.value = before + photoTag + after;
+                textarea.selectionStart = textarea.selectionEnd = startPos + photoTag.length;
+            } else {
+                textarea.value += photoTag;
+            }
+
+            textarea.focus();
+
+            const alertMsg = document.createElement('div');
+            alertMsg.className = 'fixed top-6 left-1/2 -translate-x-1/2 z-[9999] bg-stone-900/90 text-white text-xs px-4 py-2.5 rounded-full shadow-lg flex items-center gap-2 pointer-events-none transition-all';
+            alertMsg.innerHTML = '<i class="ph-fill ph-check-circle text-emerald-400"></i> Foto Polaroid inserida no texto!';
+            document.body.appendChild(alertMsg);
+            setTimeout(() => {
+                alertMsg.style.opacity = '0';
+                setTimeout(() => alertMsg.remove(), 350);
+            }, 2400);
+        }
+
+        // Tecla ESC fecha modais abertos
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                closePolaroidModal();
+                closeSheet('aa-sheet');
+                closeSheet('highlight-note-sheet');
+                closeSheet('toc-sheet');
+                closeSheet('notes-sheet');
+                closeSheet('editor-sheet');
+                closeSheet('share-sheet');
+            }
+        });
 
         // Inicialização ao carregar
         window.addEventListener('DOMContentLoaded', () => {
