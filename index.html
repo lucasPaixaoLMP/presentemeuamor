@@ -173,20 +173,41 @@
             font-weight: 700;
         }
 
-        /* Grifo Popular (Kindle Popular Highlight) */
+        /* Grifo Popular (Kindle Popular Highlight) Animado */
+        @keyframes highlightShimmer {
+            0%, 100% { background-color: var(--highlight-bg); }
+            50% { background-color: rgba(245, 194, 66, 0.52); }
+        }
+
         .kindle-popular-highlight {
             background-color: var(--highlight-bg);
             border-bottom: 1.5px dashed var(--highlight-border);
-            border-radius: 2px;
-            padding: 0 2px;
+            border-radius: 3px;
+            padding: 0 3px;
             cursor: pointer;
             position: relative;
             z-index: 35;
-            transition: filter 0.2s ease;
+            transition: filter 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
+            animation: highlightShimmer 4s ease-in-out infinite;
+        }
+
+        .kindle-popular-highlight:hover {
+            filter: brightness(0.95);
+            box-shadow: 0 2px 8px rgba(217, 163, 0, 0.22);
         }
 
         .kindle-popular-highlight:active {
-            filter: brightness(0.88);
+            filter: brightness(0.86);
+        }
+
+        @keyframes badgePulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.04); }
+        }
+
+        @keyframes sparkleSpin {
+            0%, 100% { transform: rotate(0deg) scale(1); }
+            50% { transform: rotate(18deg) scale(1.22); }
         }
 
         .popular-highlight-caption {
@@ -197,27 +218,72 @@
             font-size: 0.67rem;
             line-height: 1.2;
             color: var(--text-muted);
-            background-color: rgba(128, 128, 128, 0.09);
+            background-color: rgba(158, 71, 59, 0.10);
+            border: 1px solid rgba(158, 71, 59, 0.18);
             border-radius: 999px;
-            padding: 1px 7px;
+            padding: 1.5px 8px;
             margin-left: 5px;
             vertical-align: middle;
             cursor: pointer;
             z-index: 35;
             position: relative;
+            animation: badgePulse 3.2s ease-in-out infinite;
+            transition: transform 0.2s ease, background-color 0.2s ease;
+        }
+
+        .popular-highlight-caption:hover {
+            background-color: rgba(158, 71, 59, 0.18);
+            transform: scale(1.06) !important;
+        }
+
+        .popular-highlight-caption i {
+            animation: sparkleSpin 2.6s ease-in-out infinite;
         }
 
         /* ==========================================================
-           ESTILO FOTO POLAROID ROMÂNTICA (ÁLBUM DE MEMÓRIAS)
+           ESTILO FOTO POLAROID ROMÂNTICA SUPER ANIMADA
            ========================================================== */
+        @keyframes polaroidDropIn {
+            0% {
+                opacity: 0;
+                transform: translate3d(0, 22px, 40px) scale(0.88) rotate(var(--base-tilt, -2deg));
+            }
+            65% {
+                opacity: 1;
+                transform: translate3d(0, -4px, 0) scale(1.02) rotate(calc(var(--base-tilt, -2deg) * -0.4));
+            }
+            100% {
+                opacity: 1;
+                transform: translate3d(0, 0, 0) scale(1) rotate(var(--base-tilt, -2deg));
+            }
+        }
+
+        @keyframes polaroidFloat {
+            0%, 100% { transform: translateY(0px) rotate(var(--base-tilt, -2deg)); }
+            50% { transform: translateY(-4px) rotate(calc(var(--base-tilt, -2deg) + 0.8deg)); }
+        }
+
+        @keyframes polaroidGlossSweep {
+            0% { transform: translateX(-140%) skewX(-25deg); }
+            35%, 100% { transform: translateX(220%) skewX(-25deg); }
+        }
+
+        @keyframes heartBeatSoft {
+            0%, 100% { transform: scale(1); }
+            25% { transform: scale(1.25); }
+            45% { transform: scale(0.95); }
+            65% { transform: scale(1.18); }
+        }
+
         .polaroid-container {
             display: flex;
             justify-content: center;
             align-items: center;
             width: 100%;
-            padding: 8px 4px 6px 4px;
+            padding: 10px 4px 8px 4px;
             position: relative;
             z-index: 28;
+            perspective: 900px;
         }
 
         .polaroid-card {
@@ -225,52 +291,70 @@
             background-color: #FFFFFF;
             color: #231C18;
             padding: 8px 8px 18px 8px;
-            border-radius: 2px;
-            box-shadow: 0 8px 22px rgba(0, 0, 0, 0.16), 0 2px 6px rgba(0, 0, 0, 0.10);
+            border-radius: 3px;
+            box-shadow: 0 12px 26px rgba(0, 0, 0, 0.18), 0 3px 8px rgba(0, 0, 0, 0.10);
             max-width: 255px;
             width: 86%;
-            transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.25s ease;
+            transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.35s ease;
             cursor: pointer;
             user-select: none;
             -webkit-user-select: none;
             border: 1px solid rgba(0, 0, 0, 0.06);
+            animation:
+                polaroidDropIn 0.68s cubic-bezier(0.22, 1, 0.36, 1) backwards,
+                polaroidFloat 5.5s ease-in-out 0.7s infinite;
         }
 
         .polaroid-card:hover {
-            transform: scale(1.025) rotate(0deg) !important;
-            box-shadow: 0 14px 28px rgba(0, 0, 0, 0.24), 0 4px 10px rgba(0, 0, 0, 0.12);
+            transform: translateY(-5px) scale(1.04) rotate(0deg) !important;
+            box-shadow: 0 18px 34px rgba(0, 0, 0, 0.26), 0 6px 14px rgba(158, 71, 59, 0.16);
         }
 
         .polaroid-card:active {
-            transform: scale(0.98) !important;
+            transform: scale(0.97) !important;
         }
 
-        /* Fita Adesiva / Washi Tape autêntica no topo */
+        /* Fita Adesiva / Washi Tape autêntica no topo com detalhe dourado */
         .polaroid-tape {
             position: absolute;
             top: -9px;
             left: 50%;
             transform: translateX(-50%) rotate(-1.5deg);
-            width: 66px;
-            height: 18px;
-            background-color: rgba(255, 252, 242, 0.76);
-            border-left: 2px dashed rgba(160, 140, 120, 0.4);
-            border-right: 2px dashed rgba(160, 140, 120, 0.4);
-            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12);
+            width: 68px;
+            height: 19px;
+            background: linear-gradient(135deg, rgba(255, 250, 235, 0.85), rgba(245, 232, 205, 0.78));
+            border-left: 2px dashed rgba(160, 140, 120, 0.42);
+            border-right: 2px dashed rgba(160, 140, 120, 0.42);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.12);
             backdrop-filter: blur(2px);
             z-index: 10;
             pointer-events: none;
         }
 
-        /* Área da Imagem */
+        /* Área da Imagem com Reflexo de Luz Animado */
         .polaroid-photo-box {
             width: 100%;
             height: 172px;
             overflow: hidden;
             background-color: #f2ede4;
             position: relative;
-            border-radius: 1px;
-            box-shadow: inset 0 0 4px rgba(0, 0, 0, 0.15);
+            border-radius: 2px;
+            box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.18);
+        }
+
+        .polaroid-photo-box::after {
+            content: "";
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            left: 0;
+            width: 55%;
+            background: linear-gradient(to right,
+                rgba(255, 255, 255, 0) 0%,
+                rgba(255, 255, 255, 0.35) 50%,
+                rgba(255, 255, 255, 0) 100%);
+            pointer-events: none;
+            animation: polaroidGlossSweep 6.5s ease-in-out 1.2s infinite;
         }
 
         .polaroid-photo-box img {
@@ -279,6 +363,11 @@
             object-fit: cover;
             display: block;
             pointer-events: none;
+            transition: transform 0.6s ease;
+        }
+
+        .polaroid-card:hover .polaroid-photo-box img {
+            transform: scale(1.05);
         }
 
         /* Legenda Manuscrita Estilo Polaroid */
@@ -301,6 +390,7 @@
             color: var(--accent-color);
             font-size: 0.95rem;
             display: inline-block;
+            animation: heartBeatSoft 2.4s ease-in-out infinite;
         }
 
         .polaroid-zoom-hint {
@@ -308,7 +398,7 @@
             bottom: 4px;
             right: 6px;
             font-size: 8px;
-            color: rgba(60, 50, 45, 0.4);
+            color: rgba(60, 50, 45, 0.45);
             font-family: 'Inter', sans-serif;
             display: flex;
             align-items: center;
@@ -318,13 +408,551 @@
         }
 
         .tilt-left {
-            transform: rotate(-2deg);
+            --base-tilt: -2.2deg;
+            transform: rotate(-2.2deg);
         }
         .tilt-right {
-            transform: rotate(2deg);
+            --base-tilt: 2.2deg;
+            transform: rotate(2.2deg);
         }
         .tilt-subtle {
-            transform: rotate(-0.8deg);
+            --base-tilt: -0.9deg;
+            transform: rotate(-0.9deg);
+        }
+
+        /* ==========================================================
+           ANIMAÇÕES DE ENTRADA DOS ELEMENTOS DA PÁGINA
+           ========================================================== */
+        @keyframes pageHeadingBloom {
+            0% { opacity: 0; transform: translateY(10px) scale(0.97); }
+            100% { opacity: 1; transform: translateY(0) scale(1); }
+        }
+
+        @keyframes pageParaReveal {
+            0% { opacity: 0; transform: translateY(8px); }
+            100% { opacity: 1; transform: translateY(0); }
+        }
+
+        .page-content-animate #active-chapter-heading:not(.hidden) {
+            animation: pageHeadingBloom 0.52s cubic-bezier(0.22, 1, 0.36, 1) both;
+        }
+
+        .page-content-animate #active-paragraphs > p:nth-child(1) {
+            animation: pageParaReveal 0.45s cubic-bezier(0.22, 1, 0.36, 1) 0.05s both;
+        }
+        .page-content-animate #active-paragraphs > p:nth-child(2) {
+            animation: pageParaReveal 0.48s cubic-bezier(0.22, 1, 0.36, 1) 0.12s both;
+        }
+        .page-content-animate #active-paragraphs > p:nth-child(3) {
+            animation: pageParaReveal 0.50s cubic-bezier(0.22, 1, 0.36, 1) 0.18s both;
+        }
+
+        /* ==========================================================
+           CAPA DE LIVRO FÍSICO 3D + ANIMAÇÃO DE ABERTURA EM 3D REAL
+           ========================================================== */
+        #cover-lockscreen {
+            perspective: 1800px;
+            overflow: hidden;
+            background:
+                radial-gradient(circle at 50% 24%, rgba(212, 163, 89, 0.16) 0%, transparent 62%),
+                radial-gradient(circle at 50% 85%, rgba(158, 71, 59, 0.12) 0%, transparent 58%);
+            transition: opacity 0.45s ease;
+        }
+
+        /* Palco 3D do Livro na Capa */
+        .book-3d-stage {
+            position: relative;
+            width: 100%;
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            perspective: 1800px;
+            transform-style: preserve-3d;
+            padding: 8px 0;
+        }
+
+        @keyframes bookLevitate3D {
+            0%, 100% {
+                transform:
+                    translateY(0px)
+                    rotateX(var(--book-tilt-x, 5deg))
+                    rotateY(var(--book-tilt-y, -14deg))
+                    rotateZ(0deg);
+            }
+            50% {
+                transform:
+                    translateY(-7px)
+                    rotateX(calc(var(--book-tilt-x, 5deg) + 1.8deg))
+                    rotateY(calc(var(--book-tilt-y, -14deg) + 2.5deg))
+                    rotateZ(-0.4deg);
+            }
+        }
+
+        /* Sombra realista do livro flutuando sobre a mesa */
+        @keyframes bookShadowPulse {
+            0%, 100% { transform: translateX(-50%) scale(1); opacity: 0.52; }
+            50% { transform: translateX(-50%) scale(0.92); opacity: 0.36; }
+        }
+
+        .book-3d-floor-shadow {
+            position: absolute;
+            bottom: 6px;
+            left: 50%;
+            width: 76%;
+            height: 26px;
+            background: radial-gradient(ellipse at center, rgba(20, 10, 6, 0.65) 0%, rgba(20, 10, 6, 0) 72%);
+            filter: blur(8px);
+            pointer-events: none;
+            animation: bookShadowPulse 5s ease-in-out infinite;
+            transition: opacity 0.6s ease, transform 0.8s ease;
+        }
+
+        /* Objeto 3D Completo do Livro */
+        .book-3d-wrapper {
+            position: relative;
+            width: 286px;
+            height: 416px;
+            transform-style: preserve-3d;
+            animation: bookLevitate3D 5s ease-in-out infinite;
+            transition: transform 0.92s cubic-bezier(0.22, 1, 0.36, 1);
+            cursor: pointer;
+            --book-tilt-x: 5deg;
+            --book-tilt-y: -14deg;
+        }
+
+        @media (min-height: 760px) {
+            .book-3d-wrapper {
+                width: 304px;
+                height: 444px;
+            }
+        }
+
+        @media (max-height: 670px) {
+            .book-3d-wrapper {
+                width: 256px;
+                height: 368px;
+            }
+        }
+
+        /* Estado quando o usuário está arrastando ou abrindo o livro */
+        .book-3d-wrapper.is-interacting {
+            animation: none;
+            transition: transform 0.12s ease-out;
+        }
+
+        /* Estado de Abertura Cinematográfica 3D do Livro */
+        .book-3d-wrapper.book-opening-3d {
+            animation: none !important;
+            transform: translate3d(12px, 0, 90px) rotateX(2deg) rotateY(-2deg) scale(1.06) !important;
+            transition: transform 0.95s cubic-bezier(0.22, 1, 0.36, 1) !important;
+        }
+
+        /* Zoom final que mergulha dentro da primeira página aberta */
+        .book-3d-wrapper.book-zoom-into-page {
+            animation: none !important;
+            transform: translate3d(8px, 4px, 340px) rotateX(0deg) rotateY(0deg) scale(1.26) !important;
+            transition: transform 0.68s cubic-bezier(0.32, 0.72, 0, 1) !important;
+        }
+
+        /* 1. Contracapa Traseira (Base do Livro 3D) */
+        .book-3d-back-cover {
+            position: absolute;
+            inset: 0;
+            border-radius: 4px 14px 14px 4px;
+            background: linear-gradient(135deg, #4b151b 0%, #2f0b10 100%);
+            transform: translateZ(-24px);
+            box-shadow:
+                -12px 18px 38px rgba(0, 0, 0, 0.48),
+                0 6px 18px rgba(0, 0, 0, 0.32);
+            border: 1px solid rgba(229, 193, 124, 0.3);
+        }
+
+        /* Fita de Cetim Dourada/Carmim saindo de baixo do livro */
+        @keyframes tasselSwing {
+            0%, 100% { transform: rotate(-3deg); }
+            50% { transform: rotate(4deg); }
+        }
+        .book-3d-ribbon-tail {
+            position: absolute;
+            bottom: -24px;
+            left: 38%;
+            width: 18px;
+            height: 34px;
+            background: linear-gradient(to bottom, #7a1c24, #b02a37);
+            clip-path: polygon(0 0, 100% 0, 100% 100%, 50% 78%, 0 100%);
+            transform-origin: top center;
+            transform: translateZ(-12px);
+            animation: tasselSwing 3.8s ease-in-out infinite;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+            border-left: 1px solid rgba(246, 220, 159, 0.45);
+            border-right: 1px solid rgba(246, 220, 159, 0.45);
+        }
+
+        /* 2. Lombada 3D à Esquerda (Book Spine com Nervuras Douradas) */
+        .book-3d-spine {
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            left: -24px;
+            width: 25px;
+            transform-origin: right center;
+            transform: rotateY(-90deg);
+            border-radius: 4px 0 0 4px;
+            background:
+                repeating-linear-gradient(
+                    to bottom,
+                    transparent 0px,
+                    transparent 58px,
+                    rgba(246, 220, 159, 0.55) 58px,
+                    rgba(180, 130, 55, 0.85) 61px,
+                    rgba(35, 8, 12, 0.7) 64px,
+                    transparent 66px
+                ),
+                linear-gradient(to right, #2b0a0e 0%, #631b23 48%, #3c0f15 100%);
+            box-shadow: inset 0 0 8px rgba(0, 0, 0, 0.65);
+            border-top: 1px solid rgba(229, 193, 124, 0.4);
+            border-bottom: 1px solid rgba(229, 193, 124, 0.4);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+
+        .book-3d-spine-title {
+            writing-mode: vertical-rl;
+            text-orientation: mixed;
+            transform: rotate(180deg);
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 9px;
+            letter-spacing: 0.28em;
+            text-transform: uppercase;
+            color: #f3d493;
+            opacity: 0.85;
+            white-space: nowrap;
+        }
+
+        /* 3. Corte Lateral Direito das Páginas 3D (Gilded Fore-Edge Stack) */
+        .book-3d-pages-right {
+            position: absolute;
+            top: 5px;
+            bottom: 5px;
+            right: -21px;
+            width: 22px;
+            transform-origin: left center;
+            transform: rotateY(90deg);
+            background:
+                repeating-linear-gradient(
+                    to right,
+                    #fbf0d9 0px,
+                    #e7d4b1 1.5px,
+                    #fdf7ea 3px
+                );
+            box-shadow:
+                inset 0 0 10px rgba(138, 98, 40, 0.35),
+                inset -2px 0 4px rgba(212, 168, 83, 0.45);
+            border-top: 1px solid #d9c39e;
+            border-bottom: 1px solid #d9c39e;
+        }
+
+        /* Corte Inferior das Páginas 3D */
+        .book-3d-pages-bottom {
+            position: absolute;
+            left: 4px;
+            right: 4px;
+            bottom: -21px;
+            height: 22px;
+            transform-origin: top center;
+            transform: rotateX(-90deg);
+            background:
+                repeating-linear-gradient(
+                    to bottom,
+                    #fbf0d9 0px,
+                    #e4cfa9 1.5px,
+                    #fdf7ea 3px
+                );
+            box-shadow: inset 0 0 8px rgba(120, 85, 35, 0.35);
+        }
+
+        /* 4. Miolo Interno do Livro (Primeira Página Real Visível ao Abrir a Capa) */
+        .book-3d-inner-page {
+            position: absolute;
+            inset: 4px 5px 4px 2px;
+            border-radius: 2px 11px 11px 2px;
+            background-color: var(--bg-page);
+            color: var(--text-main);
+            transform: translateZ(-2px);
+            box-shadow:
+                inset 16px 0 26px rgba(30, 18, 10, 0.22),
+                inset -1px 0 2px rgba(0, 0, 0, 0.12);
+            padding: 18px 18px 14px 22px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            overflow: hidden;
+            backface-visibility: hidden;
+        }
+
+        /* 5. Folhas de Guarda Intermediárias (Flyleaves) que Folheiam em 3D na Abertura */
+        .book-3d-flyleaf {
+            position: absolute;
+            inset: 4px 5px 4px 2px;
+            border-radius: 2px 11px 11px 2px;
+            background: linear-gradient(to right, #e9d7b6 0%, #fbf0d9 16%, #fdf6e6 88%, #efe0c2 100%);
+            transform-origin: left center;
+            transform-style: preserve-3d;
+            transition: transform 0.88s cubic-bezier(0.28, 0.84, 0.42, 1), opacity 0.6s ease;
+            box-shadow: -3px 0 12px rgba(0, 0, 0, 0.14);
+            pointer-events: none;
+            display: flex;
+             flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            text-align: center;
+            border-right: 1px solid rgba(180, 150, 110, 0.35);
+        }
+
+        .book-3d-flyleaf.flyleaf-1 {
+            transform: translateZ(1px) rotateY(0deg);
+            transition-delay: 0.06s;
+        }
+        .book-3d-flyleaf.flyleaf-2 {
+            transform: translateZ(0px) rotateY(0deg);
+            transition-delay: 0.14s;
+        }
+        .book-3d-flyleaf.flyleaf-3 {
+            transform: translateZ(-1px) rotateY(0deg);
+            transition-delay: 0.22s;
+        }
+
+        /* Quando o livro abre em 3D, as folhas de guarda folheiam em cascata! */
+        .book-opening-3d .book-3d-flyleaf.flyleaf-1,
+        .book-zoom-into-page .book-3d-flyleaf.flyleaf-1 {
+            transform: translateZ(1px) rotateY(-158deg);
+        }
+        .book-opening-3d .book-3d-flyleaf.flyleaf-2,
+        .book-zoom-into-page .book-3d-flyleaf.flyleaf-2 {
+            transform: translateZ(0px) rotateY(-148deg);
+        }
+        .book-opening-3d .book-3d-flyleaf.flyleaf-3,
+        .book-zoom-into-page .book-3d-flyleaf.flyleaf-3 {
+            transform: translateZ(-1px) rotateY(-136deg);
+            opacity: 0.35;
+        }
+
+        /* 6. Dobradiça 3D da Capa Dura Frontal (Gira até -166deg ao abrir!) */
+        .book-3d-front-cover-hinge {
+            position: absolute;
+            inset: 0;
+            transform-origin: left center;
+            transform-style: preserve-3d;
+            transform: translateZ(3px) rotateY(var(--cover-open-angle, 0deg));
+            transition: transform 0.92s cubic-bezier(0.26, 0.86, 0.38, 1);
+            z-index: 10;
+        }
+
+        .book-3d-wrapper.is-dragging-cover .book-3d-front-cover-hinge {
+            transition: none !important;
+        }
+
+        .book-opening-3d .book-3d-front-cover-hinge,
+        .book-zoom-into-page .book-3d-front-cover-hinge {
+            transform: translateZ(3px) rotateY(-165deg) !important;
+        }
+
+        /* Face Externa da Capa Dura (Couro Carmim / Bordô Imperial & Folha de Ouro) */
+        .book-3d-front-outside {
+            position: absolute;
+            inset: 0;
+            border-radius: 4px 14px 14px 4px;
+            backface-visibility: hidden;
+            -webkit-backface-visibility: hidden;
+            background:
+                radial-gradient(circle at 50% 32%, rgba(168, 48, 58, 0.55) 0%, rgba(92, 20, 28, 0.92) 65%, #3d0c13 100%),
+                repeating-radial-gradient(rgba(255, 255, 255, 0.025) 0px, rgba(0, 0, 0, 0.03) 2px);
+            box-shadow:
+                inset 4px 0 12px rgba(255, 225, 165, 0.18),
+                inset 14px 0 22px rgba(20, 4, 7, 0.65),
+                inset -2px -2px 8px rgba(0, 0, 0, 0.45),
+                0 14px 32px rgba(0, 0, 0, 0.36);
+            border: 1.5px solid rgba(232, 195, 122, 0.52);
+            padding: 14px 14px 14px 20px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            overflow: hidden;
+        }
+
+        /* Sulco de Encadernação (Hinge Crease) na esquerda da Capa Dura */
+        .book-3d-front-outside::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            left: 10px;
+            width: 4px;
+            background: linear-gradient(to right, rgba(0, 0, 0, 0.52), rgba(246, 220, 159, 0.24), rgba(0, 0, 0, 0.15));
+            z-index: 2;
+            pointer-events: none;
+        }
+
+        /* Reflexo de Luz Dourada (Foil Glare) que atravessa a capa */
+        @keyframes coverFoilSweep {
+            0% { transform: translateX(-140%) rotate(22deg); }
+            32%, 100% { transform: translateX(220%) rotate(22deg); }
+        }
+
+        .book-3d-foil-sheen {
+            position: absolute;
+            top: -30%;
+            bottom: -30%;
+            left: 0;
+            width: 55%;
+            background: linear-gradient(
+                to right,
+                rgba(255, 255, 255, 0) 0%,
+                rgba(255, 236, 179, 0.18) 50%,
+                rgba(255, 255, 255, 0) 100%
+            );
+            pointer-events: none;
+            z-index: 4;
+            animation: coverFoilSweep 6s ease-in-out infinite;
+        }
+
+        /* Moldura Interna Dupla em Folha de Ouro */
+        .book-3d-gold-frame {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            border: 1.5px solid rgba(238, 203, 132, 0.68);
+            border-radius: 3px 10px 10px 3px;
+            padding: 14px 12px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            align-items: center;
+            text-align: center;
+            box-shadow:
+                inset 0 0 0 3px rgba(72, 14, 21, 0.9),
+                inset 0 0 0 4px rgba(238, 203, 132, 0.35),
+                inset 0 0 28px rgba(0, 0, 0, 0.45);
+            z-index: 3;
+        }
+
+        /* Texto em Ouro Metálico na Capa 3D */
+        @keyframes goldTextShimmer {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+
+        .gold-foil-text {
+            background: linear-gradient(
+                110deg,
+                #e6c075 0%,
+                #fff1c9 28%,
+                #d6a856 52%,
+                #fff3d1 74%,
+                #dfb667 100%
+            );
+            background: linear-gradient(110deg, #e5be73 0%, #fff3cf 30%, #d4a44f 55%, #fff0c4 78%, #dca954 100%);
+            background-size: 220% auto;
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.35);
+            animation: goldTextShimmer 5s ease-in-out infinite;
+        }
+
+        /* Selo de Cera & Ouro Real 3D no Centro da Capa */
+        @keyframes sealHaloSpin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        @keyframes sealPulseGlow {
+            0%, 100% { box-shadow: 0 0 0 0 rgba(238, 203, 132, 0.35), 0 6px 16px rgba(0, 0, 0, 0.45); }
+            50% { box-shadow: 0 0 0 8px rgba(238, 203, 132, 0), 0 8px 22px rgba(238, 203, 132, 0.35); }
+        }
+
+        .cover-royal-seal {
+            position: relative;
+            width: 62px;
+            height: 62px;
+            border-radius: 999px;
+            background: radial-gradient(circle at 35% 30%, #b8323e, #6e141d 70%, #470a10 100%);
+            border: 2px solid #eed08a;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            animation: sealPulseGlow 3.2s ease-in-out infinite;
+        }
+
+        .cover-royal-seal::before {
+            content: "";
+            position: absolute;
+            inset: -5px;
+            border-radius: 999px;
+            border: 1px dashed rgba(243, 212, 147, 0.65);
+            animation: sealHaloSpin 18s linear infinite;
+        }
+
+        /* Face Interna da Capa Dura (Contracapa Ex-Libris revelada ao abrir em 3D!) */
+        .book-3d-front-inside {
+            position: absolute;
+            inset: 0;
+            border-radius: 14px 4px 4px 14px;
+            backface-visibility: hidden;
+            -webkit-backface-visibility: hidden;
+            transform: rotateY(180deg);
+            background:
+                radial-gradient(circle at center, #fdf6e8 0%, #f1e0c1 100%);
+            border: 2px solid #6b1d26;
+            box-shadow: inset -18px 0 28px rgba(45, 22, 12, 0.25);
+            padding: 20px 18px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            color: #3a231c;
+        }
+
+        .ex-libris-plate {
+            border: 1.5px double #b08243;
+            border-radius: 8px;
+            padding: 16px 14px;
+            background-color: rgba(255, 252, 245, 0.85);
+            box-shadow: 0 4px 14px rgba(0, 0, 0, 0.08);
+            width: 90%;
+        }
+
+        /* ==========================================================
+           PARTÍCULAS MÁGICAS FLUTUANTES (CAPA E LEITOR)
+           ========================================================== */
+        @keyframes ambientFloatUp {
+            0% {
+                transform: translate3d(0, 20px, 0) scale(0.5) rotate(0deg);
+                opacity: 0;
+            }
+            20% {
+                opacity: var(--max-op, 0.65);
+            }
+            80% {
+                opacity: var(--max-op, 0.65);
+            }
+            100% {
+                transform: translate3d(var(--drift-x, 18px), -110vh, 0) scale(1.1) rotate(25deg);
+                opacity: 0;
+            }
+        }
+
+        .ambient-particle {
+            position: absolute;
+            bottom: -24px;
+            pointer-events: none;
+            animation: ambientFloatUp var(--dur, 9s) linear var(--delay, 0s) infinite;
+            z-index: 5;
         }
 
         /* ==========================================================
@@ -343,6 +971,41 @@
 
         #interactive-book-stage:active {
             cursor: grabbing;
+        }
+
+        /* Sombra de Lombada de Livro Aberto na Lateral Esquerda do Leitor */
+        .open-book-spine-gutter {
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            left: 0;
+            width: 22px;
+            z-index: 26;
+            pointer-events: none;
+            background: linear-gradient(
+                to right,
+                rgba(25, 14, 8, 0.24) 0%,
+                rgba(25, 14, 8, 0.08) 42%,
+                rgba(255, 255, 255, 0.14) 75%,
+                rgba(0, 0, 0, 0) 100%
+            );
+        }
+
+        /* Borda Direita de Páginas Empilhadas no Leitor */
+        .open-book-right-stack {
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            right: 0;
+            width: 5px;
+            z-index: 26;
+            pointer-events: none;
+            background: repeating-linear-gradient(
+                to right,
+                rgba(120, 95, 65, 0.18) 0px,
+                rgba(255, 255, 255, 0.25) 1px,
+                rgba(120, 95, 65, 0.24) 2px
+            );
         }
 
         /* Folha Completa (Underlay = Próxima/Anterior, Active = Página Atual) */
@@ -375,14 +1038,14 @@
             position: absolute;
             top: -10%;
             bottom: -10%;
-            width: 68px;
+            width: 82px;
             z-index: 24;
             pointer-events: none;
             opacity: 0;
             background: linear-gradient(to right,
                 rgba(0, 0, 0, 0) 0%,
-                var(--curl-shadow) 48%,
-                rgba(0, 0, 0, 0.08) 78%,
+                var(--curl-shadow) 44%,
+                rgba(0, 0, 0, 0.12) 76%,
                 rgba(0, 0, 0, 0) 100%);
             will-change: transform, opacity;
         }
@@ -392,21 +1055,22 @@
             position: absolute;
             top: -4%;
             bottom: -4%;
-            width: 80px;
+            width: 88px;
             z-index: 25;
             pointer-events: none;
             opacity: 0;
-            border-radius: 3px 0 0 3px;
+            border-radius: 4px 0 0 4px;
             background: linear-gradient(to right,
-                rgba(0, 0, 0, 0.16) 0%,
+                rgba(0, 0, 0, 0.20) 0%,
                 var(--bg-page-back) 14%,
-                var(--bg-page) 56%,
+                var(--bg-page) 52%,
+                rgba(255, 255, 255, 0.35) 62%,
                 var(--bg-page-back) 88%,
-                rgba(0, 0, 0, 0.22) 100%);
+                rgba(0, 0, 0, 0.25) 100%);
             box-shadow:
-                -10px 0 24px var(--curl-shadow),
-                inset 2px 0 5px rgba(255, 255, 255, 0.45),
-                inset -3px 0 8px rgba(0, 0, 0, 0.12);
+                -14px 0 28px var(--curl-shadow),
+                inset 3px 0 6px rgba(255, 255, 255, 0.55),
+                inset -4px 0 10px rgba(0, 0, 0, 0.15);
             will-change: transform, width, opacity;
             overflow: hidden;
         }
@@ -418,8 +1082,8 @@
             inset: 14% 12%;
             background-image: repeating-linear-gradient(
                 to bottom,
-                rgba(120, 102, 85, 0.07) 0px,
-                rgba(120, 102, 85, 0.07) 2px,
+                rgba(120, 102, 85, 0.08) 0px,
+                rgba(120, 102, 85, 0.08) 2px,
                 transparent 2px,
                 transparent 16px
             );
@@ -474,7 +1138,7 @@
 
         .bottom-sheet-panel {
             transform: translateY(100%);
-            transition: transform 0.32s cubic-bezier(0.32, 0.72, 0, 1);
+            transition: transform 0.34s cubic-bezier(0.22, 1, 0.36, 1);
             background-color: var(--sheet-bg);
             border-top: 1px solid var(--border-color);
         }
@@ -482,26 +1146,36 @@
             transform: translateY(0);
         }
 
-        /* Fita de Marcador no Canto Direito */
+        /* Fita de Marcador no Canto Direito com Pêndulo */
+        @keyframes ribbonPendulum {
+            0% { transform: translateY(0) rotate(0deg); }
+            25% { transform: translateY(0) rotate(6deg); }
+            55% { transform: translateY(0) rotate(-4deg); }
+            80% { transform: translateY(0) rotate(2deg); }
+            100% { transform: translateY(0) rotate(0deg); }
+        }
+
         .corner-bookmark-ribbon {
-            transform: translateY(-105%);
-            transition: transform 0.38s cubic-bezier(0.34, 1.56, 0.64, 1);
+            transform-origin: top center;
+            transform: translateY(-115%);
+            transition: transform 0.42s cubic-bezier(0.34, 1.56, 0.64, 1);
         }
         .corner-bookmark-ribbon.active {
             transform: translateY(0);
+            animation: ribbonPendulum 0.9s ease-out;
         }
 
-        /* Partículas Românticas ao favoritar página */
+        /* Partículas Românticas ao favoritar página / abrir livro */
         @keyframes heartFloat {
-            0% { transform: translateY(0) scale(0.6); opacity: 0; }
-            25% { opacity: 0.95; }
-            100% { transform: translateY(-78px) scale(1.18); opacity: 0; }
+            0% { transform: translate3d(0, 0, 0) scale(0.5) rotate(0deg); opacity: 0; }
+            20% { opacity: 0.98; }
+            100% { transform: translate3d(var(--hx, 0px), -95px, 0) scale(1.25) rotate(var(--hrot, 15deg)); opacity: 0; }
         }
         .micro-heart {
             position: absolute;
             pointer-events: none;
             z-index: 80;
-            animation: heartFloat 2s ease-out forwards;
+            animation: heartFloat 2.1s cubic-bezier(0.22, 1, 0.36, 1) forwards;
         }
 
         /* Custom Range Input estilo Kindle */
@@ -540,70 +1214,206 @@
     <!-- CONTAINER MOBILE-FIRST (100% no Smartphone / 430px Centralizado no Desktop) -->
     <div id="kindle-app-shell" class="eink-paper-grain">
 
+        <!-- CAMADA DE PARTÍCULAS ROMÂNTICAS AMBIENTAIS (POEIRA DE OURO & CORAÇÕES SUTIS) -->
+        <div id="ambient-particles-layer" class="absolute inset-0 overflow-hidden pointer-events-none z-10"></div>
+
         <!-- ==========================================================
-             1. TELA DE CAPA ESTILO LOCKSCREEN / BIBLIOTECA KINDLE
+             1. TELA DE CAPA 3D INTERATIVA COM ANIMAÇÃO DE ABERTURA DE LIVRO EM 3D
              ========================================================== -->
-        <section id="cover-lockscreen" class="w-full h-full flex flex-col justify-between p-6 select-none z-40 relative transition-all duration-500">
-            
-            <!-- Moldura Editorial Clássica de Capa Kindle -->
-            <div class="w-full h-full border rounded-2xl p-6 flex flex-col justify-between relative overflow-hidden"
-                 style="border-color: var(--border-color); box-shadow: inset 0 0 40px rgba(0,0,0,0.03);">
+        <section id="cover-lockscreen" class="w-full h-full flex flex-col justify-between px-5 py-4 select-none z-40 relative">
+
+            <!-- Topo da Tela da Capa -->
+            <div class="flex justify-between items-center text-[10px] tracking-[0.22em] uppercase z-20 pt-1" style="color: var(--text-muted);">
+                <span class="flex items-center gap-1.5 font-medium">
+                    <i class="ph-fill ph-sparkle" style="color: var(--accent-color);"></i>
+                    Edição Especial 3D
+                </span>
+                <button onclick="toggleSoundEffects()" id="sound-toggle-btn"
+                        class="flex items-center gap-1 px-2.5 py-1 rounded-full border text-[10px] tracking-wider transition-all active:scale-95"
+                        style="border-color: var(--border-color); background-color: rgba(255,255,255,0.25); color: var(--text-main);"
+                        title="Ativar/Desativar som suave de folha de papel">
+                    <i id="sound-toggle-icon" class="ph-fill ph-speaker-high text-xs" style="color: var(--accent-color);"></i>
+                    <span id="sound-toggle-label">Som 3D</span>
+                </button>
+            </div>
+
+            <!-- PALCO CENTRAL DO LIVRO FÍSICO 3D -->
+            <div class="book-3d-stage" id="cover-book-stage">
                 
-                <!-- Cantoneiras sutis -->
-                <div class="flex justify-between items-center text-[11px] tracking-[0.22em] uppercase" style="color: var(--text-muted);">
-                    <span>✦ Kindle Edition</span>
-                    <span>Presente Exclusivo ✦</span>
-                </div>
+                <!-- Sombra realista projetada no chão abaixo do livro -->
+                <div class="book-3d-floor-shadow" id="book-floor-shadow"></div>
 
-                <!-- Miolo da Capa -->
-                <div class="my-auto flex flex-col items-center text-center px-2">
-                    <!-- Selo de Colecionador -->
-                    <div class="w-16 h-16 rounded-full border flex items-center justify-center mb-6 shadow-xs"
-                         style="border-color: var(--border-color); background-color: rgba(158, 71, 59, 0.06);">
-                        <i class="ph-duotone ph-book-bookmark text-3xl" style="color: var(--accent-color);"></i>
+                <!-- LIVRO 3D INTERATIVO (Toque ou Arraste a Capa para Abrir!) -->
+                <div class="book-3d-wrapper" id="book-3d-object" title="Toque ou arraste a capa para abrir o livro em 3D">
+
+                    <!-- 1. Contracapa Traseira + Fita de Cetim -->
+                    <div class="book-3d-back-cover"></div>
+                    <div class="book-3d-ribbon-tail"></div>
+
+                    <!-- 2. Lombada 3D com Nervuras Clássicas e Título Dourado -->
+                    <div class="book-3d-spine">
+                        <span class="book-3d-spine-title" id="spine-book-title">PARA O MEU AMOR • KINDLE EDITION</span>
                     </div>
 
-                    <span class="text-[10px] uppercase tracking-[0.28em] font-semibold mb-2" style="color: var(--accent-color);">
-                        Edição Especial de Colecionador
-                    </span>
+                    <!-- 3. Corte 3D das Páginas Folheadas a Ouro (Direita e Base) -->
+                    <div class="book-3d-pages-right"></div>
+                    <div class="book-3d-pages-bottom"></div>
 
-                    <h1 id="cover-main-title" class="serif-display text-4xl sm:text-[42px] font-bold tracking-tight leading-none mb-3">
-                        Para o Meu Amor
-                    </h1>
+                    <!-- 4. Primeira Página Interna Real do Livro (Revelada quando a capa 3D abre!) -->
+                    <div class="book-3d-inner-page eink-paper-grain">
+                        <div class="text-center pt-1">
+                            <span class="text-[8px] uppercase tracking-[0.24em] opacity-60 block" style="color: var(--text-muted);">
+                                CAPÍTULO I
+                            </span>
+                            <h3 id="cover-inner-chap-title" class="serif-display text-base font-bold mt-0.5" style="color: var(--text-main);">
+                                O Dia em que Tudo Mudou
+                            </h3>
+                            <div class="flex items-center justify-center gap-1.5 my-1.5 opacity-60">
+                                <span class="w-5 h-[1px]" style="background-color: var(--border-color);"></span>
+                                <span class="text-[9px]" style="color: var(--accent-color);">❦</span>
+                                <span class="w-5 h-[1px]" style="background-color: var(--border-color);"></span>
+                            </div>
+                        </div>
 
-                    <p id="cover-subtitle" class="serif-display italic text-lg leading-relaxed max-w-[270px]" style="color: var(--text-muted);">
-                        “Uma edição especial sobre nós dois, escrita para ser lida com o coração.”
-                    </p>
+                        <p id="cover-inner-first-para" class="text-[10.5px] leading-relaxed text-justify drop-cap flex-1 overflow-hidden" style="font-family: var(--reader-font); color: var(--text-main);">
+                            Existem momentos na vida que dividem a nossa história em um “antes” e um “depois”. Antes de você chegar, os dias seguiam um ritmo comum, mas desde o instante em que os nossos caminhos se cruzaram, tudo ganhou uma cor, uma música e um sentido completamente novo.
+                        </p>
 
-                    <!-- Ornamento Central -->
-                    <div class="flex items-center gap-3 my-6 opacity-75">
-                        <span class="w-10 h-[1px]" style="background-color: var(--border-color);"></span>
-                        <i class="ph-fill ph-heart text-xs" style="color: var(--accent-color);"></i>
-                        <span class="w-10 h-[1px]" style="background-color: var(--border-color);"></span>
+                        <div class="flex items-center justify-between text-[8px] pt-2 opacity-60" style="color: var(--text-muted);">
+                            <span>Posição 86 • 16%</span>
+                            <span>Página 1</span>
+                        </div>
                     </div>
 
-                    <p id="cover-author" class="text-[11px] uppercase tracking-[0.22em] font-medium" style="color: var(--text-muted);">
-                        Autor: <span style="color: var(--text-main);">Lucas</span>
-                    </p>
-                </div>
+                    <!-- 5. Folhas de Guarda (Flyleaves) que abrem em leque 3D -->
+                    <div class="book-3d-flyleaf flyleaf-3"></div>
+                    <div class="book-3d-flyleaf flyleaf-2"></div>
+                    <div class="book-3d-flyleaf flyleaf-1">
+                        <i class="ph-fill ph-heart text-lg mb-2" style="color: #9e473b; opacity: 0.45;"></i>
+                        <span class="serif-display italic text-xs" style="color: #786655;">
+                            “Para ler com o coração...”
+                        </span>
+                    </div>
 
-                <!-- Base da Capa: Gesto / Botão de Abrir Livro -->
-                <div class="flex flex-col items-center gap-3 pt-2">
-                    <button onclick="openReaderFromCover()"
-                            class="w-full py-3.5 px-5 rounded-xl font-medium text-sm text-white shadow-md active:scale-[0.98] transition-all flex items-center justify-center gap-2"
-                            style="background-color: var(--accent-color);">
-                        <i class="ph-bold ph-book-open text-lg"></i>
-                        <span>Toque ou arraste para abrir o livro</span>
+                    <!-- 6. Dobradiça 3D da Capa Dura Frontal (Frente + Verso Ex-Libris) -->
+                    <div class="book-3d-front-cover-hinge" id="book-3d-front-hinge">
+                        
+                        <!-- FACE EXTERNA DA CAPA DURA -->
+                        <div class="book-3d-front-outside">
+                            <!-- Brilho de Folha de Ouro Animado -->
+                            <div class="book-3d-foil-sheen"></div>
+
+                            <!-- Moldura Dupla Dourada -->
+                            <div class="book-3d-gold-frame">
+                                
+                                <!-- Cantoneiras Ornamentais Douradas (SVG) -->
+                                <svg class="absolute top-1.5 left-1.5 w-6 h-6 text-[#eed08a] opacity-80 pointer-events-none" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                                    <path d="M2 14V4a2 2 0 0 1 2-2h10"/>
+                                    <path d="M6 10V6h4"/>
+                                    <circle cx="6" cy="6" r="1" fill="currentColor"/>
+                                </svg>
+                                <svg class="absolute top-1.5 right-1.5 w-6 h-6 text-[#eed08a] opacity-80 pointer-events-none" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                                    <path d="M22 14V4a2 2 0 0 0-2-2H10"/>
+                                    <path d="M18 10V6h-4"/>
+                                    <circle cx="18" cy="6" r="1" fill="currentColor"/>
+                                </svg>
+                                <svg class="absolute bottom-1.5 left-1.5 w-6 h-6 text-[#eed08a] opacity-80 pointer-events-none" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                                    <path d="M2 10v10a2 2 0 0 0 2 2h10"/>
+                                    <path d="M6 14v4h4"/>
+                                    <circle cx="6" cy="18" r="1" fill="currentColor"/>
+                                </svg>
+                                <svg class="absolute bottom-1.5 right-1.5 w-6 h-6 text-[#eed08a] opacity-80 pointer-events-none" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                                    <path d="M22 10v10a2 2 0 0 1-2 2H10"/>
+                                    <path d="M18 14v4h-4"/>
+                                    <circle cx="18" cy="18" r="1" fill="currentColor"/>
+                                </svg>
+
+                                <!-- Topo Editorial da Capa -->
+                                <div class="w-full flex items-center justify-center gap-1.5 text-[9px] tracking-[0.26em] uppercase text-[#f3d493]/85 pt-0.5">
+                                    <span>✦</span>
+                                    <span>Kindle Collector's Edition</span>
+                                    <span>✦</span>
+                                </div>
+
+                                <!-- Centro da Capa: Medalhão 3D, Título em Ouro e Subtítulo -->
+                                <div class="my-auto flex flex-col items-center px-1">
+                                    <div class="cover-royal-seal mb-3.5">
+                                        <i class="ph-fill ph-heart text-2xl text-[#fff0c4]" style="animation: heartBeatSoft 2.4s ease-in-out infinite;"></i>
+                                    </div>
+
+                                    <span class="text-[8.5px] uppercase tracking-[0.3em] font-semibold text-[#eed08a]/90 mb-1.5">
+                                        Nossa História de Amor
+                                    </span>
+
+                                    <h1 id="cover-main-title" class="serif-display gold-foil-text text-3xl sm:text-[34px] font-bold tracking-tight leading-[1.08] mb-2.5">
+                                        Para o Meu Amor
+                                    </h1>
+
+                                    <p id="cover-subtitle" class="serif-display italic text-[14px] leading-snug text-[#f9e7c2]/90 max-w-[215px]">
+                                        “Uma edição especial sobre nós dois, escrita para ser lida com o coração.”
+                                    </p>
+
+                                    <!-- Ornamento Dourado Central -->
+                                    <div class="flex items-center gap-2.5 my-3.5 opacity-90">
+                                        <span class="w-8 h-[1px] bg-gradient-to-r from-transparent to-[#eed08a]"></span>
+                                        <i class="ph-fill ph-sparkle text-[11px] text-[#eed08a]"></i>
+                                        <span class="w-8 h-[1px] bg-gradient-to-l from-transparent to-[#eed08a]"></span>
+                                    </div>
+                                </div>
+
+                                <!-- Rodapé da Capa Dura: Autor -->
+                                <div class="w-full pb-0.5">
+                                    <p id="cover-author" class="text-[10px] uppercase tracking-[0.24em] font-medium text-[#eed08a]/85">
+                                        Autor: <span class="text-[#fff4d6] font-semibold">Lucas</span>
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- FACE INTERNA DA CAPA DURA (CONTRACAPA EX-LIBRIS VISÍVEL QUANDO GIRA EM 3D!) -->
+                        <div class="book-3d-front-inside">
+                            <div class="ex-libris-plate">
+                                <span class="text-[9px] uppercase tracking-[0.28em] text-[#8c3b32] font-bold block mb-1">
+                                    ✦ Ex-Libris ✦
+                                </span>
+                                <p class="serif-display italic text-sm text-[#2C221E] leading-snug">
+                                    “Este livro pertence ao grande amor da minha vida.”
+                                </p>
+                                <div class="my-2 flex justify-center">
+                                    <i class="ph-fill ph-heart text-xs text-[#9e473b]"></i>
+                                </div>
+                                <span id="ex-libris-author" class="text-[9px] uppercase tracking-widest text-[#786655] block">
+                                    Com todo o meu amor, Lucas
+                                </span>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+            <!-- Base da Tela de Capa: Botão Animado de Abertura 3D + Ações Rápidas -->
+            <div class="flex flex-col items-center gap-2.5 pt-1 z-20">
+                <button id="open-book-cta-btn" onclick="openReaderFromCover()"
+                        class="w-full py-3.5 px-5 rounded-2xl font-semibold text-sm text-white shadow-lg active:scale-[0.98] transition-all flex items-center justify-center gap-2.5 relative overflow-hidden group"
+                        style="background: linear-gradient(135deg, #8c232e 0%, #b03a48 50%, #7a1c26 100%); border: 1px solid rgba(238, 203, 132, 0.45);">
+                    <i class="ph-duotone ph-book-open-text text-xl text-[#fff0c4] transition-transform group-hover:scale-110"></i>
+                    <span class="tracking-wide">Abrir Nosso Livro em 3D</span>
+                    <i class="ph-bold ph-arrow-right text-sm text-[#fff0c4]/90"></i>
+                </button>
+
+                <span class="text-[10px] opacity-70 flex items-center gap-1" style="color: var(--text-muted);">
+                    <i class="ph-bold ph-hand-swipe-left text-xs" style="color: var(--accent-color);"></i>
+                    Toque no livro ou arraste a capa dura com o dedo
+                </span>
+
+                <div class="flex items-center justify-between w-full text-[11px] pt-1 border-t opacity-85" style="border-color: var(--border-color); color: var(--text-muted);">
+                    <button onclick="openSheet('share-sheet')" class="underline font-medium flex items-center gap-1 py-0.5" style="color: var(--text-main);">
+                        <i class="ph-bold ph-qr-code"></i> QR Code / Link
                     </button>
-
-                    <div class="flex items-center justify-between w-full text-[11px] pt-1 opacity-75" style="color: var(--text-muted);">
-                        <button onclick="openSheet('share-sheet')" class="underline font-medium flex items-center gap-1" style="color: var(--text-main);">
-                            <i class="ph-bold ph-qr-code"></i> QR Code / Link
-                        </button>
-                        <button onclick="openEditorSheet()" class="underline font-medium flex items-center gap-1" style="color: var(--accent-color);">
-                            <i class="ph ph-pencil-simple"></i> Personalizar texto
-                        </button>
-                    </div>
+                    <button onclick="openEditorSheet()" class="underline font-medium flex items-center gap-1 py-0.5" style="color: var(--accent-color);">
+                        <i class="ph ph-pencil-simple"></i> Personalizar texto & fotos
+                    </button>
                 </div>
             </div>
         </section>
@@ -745,7 +1555,9 @@
                 </div>
 
 
-                <!-- CAMADA 3: SOMBRA DINÂMICA E ABA CURVADA 3D DO VERSO DA FOLHA -->
+                <!-- CAMADA 3: SOMBRA DINÂMICA, LOMBADA DO LIVRO ABERTO E ABA CURVADA 3D DO VERSO DA FOLHA -->
+                <div class="open-book-spine-gutter"></div>
+                <div class="open-book-right-stack"></div>
                 <div id="curl-drop-shadow"></div>
                 <div id="curl-backside-flap"></div>
 
@@ -1479,49 +2291,357 @@ Obrigado por ser minha parceira, minha melhor amiga e o grande amor da minha vid
         }
 
         // ==========================================================
-        // INICIALIZAÇÃO E CAPA
+        // EFEITOS SONOROS TÁTEIS (WEB AUDIO API - PAPEL 3D E HARPA SUAVE)
         // ==========================================================
+        let soundEnabled = true;
+        let audioCtx = null;
+
+        function getAudioCtx() {
+            if (!soundEnabled) return null;
+            try {
+                if (!audioCtx) {
+                    const AudioContextClass = window.AudioContext || window.webkitAudioContext;
+                    if (AudioContextClass) audioCtx = new AudioContextClass();
+                }
+                if (audioCtx && audioCtx.state === 'suspended') {
+                    audioCtx.resume();
+                }
+                return audioCtx;
+            } catch (_) {
+                return null;
+            }
+        }
+
+        function playSoundEffect(type) {
+            const ctx = getAudioCtx();
+            if (!ctx) return;
+            try {
+                const now = ctx.currentTime;
+                if (type === 'pageTurn' || type === 'bookOpen') {
+                    // Ruído branco filtrado suave simulando o roce de uma folha de papel real
+                    const duration = type === 'bookOpen' ? 0.34 : 0.18;
+                    const bufferSize = Math.floor(ctx.sampleRate * duration);
+                    const buffer = ctx.createBuffer(1, bufferSize, ctx.sampleRate);
+                    const data = buffer.getChannelData(0);
+                    for (let i = 0; i < bufferSize; i++) {
+                        const env = Math.sin((i / bufferSize) * Math.PI);
+                        data[i] = (Math.random() * 2 - 1) * env * 0.09;
+                    }
+                    const noise = ctx.createBufferSource();
+                    noise.buffer = buffer;
+
+                    const filter = ctx.createBiquadFilter();
+                    filter.type = 'bandpass';
+                    filter.frequency.setValueAtTime(type === 'bookOpen' ? 950 : 1350, now);
+                    filter.Q.setValueAtTime(1.4, now);
+
+                    const gain = ctx.createGain();
+                    gain.gain.setValueAtTime(0.01, now);
+                    gain.gain.exponentialRampToValueAtTime(0.16, now + duration * 0.4);
+                    gain.gain.exponentialRampToValueAtTime(0.001, now + duration);
+
+                    noise.connect(filter);
+                    filter.connect(gain);
+                    gain.connect(ctx.destination);
+                    noise.start(now);
+                }
+
+                if (type === 'bookOpen' || type === 'sparkle') {
+                    // Acorde cristalino romântico sutil
+                    const notes = type === 'bookOpen' ? [523.25, 659.25, 783.99, 1046.5] : [659.25, 987.77];
+                    notes.forEach((freq, idx) => {
+                        const osc = ctx.createOscillator();
+                        const gain = ctx.createGain();
+                        osc.type = 'sine';
+                        osc.frequency.setValueAtTime(freq, now + idx * 0.065);
+                        gain.gain.setValueAtTime(0.001, now + idx * 0.065);
+                        gain.gain.exponentialRampToValueAtTime(0.035, now + idx * 0.065 + 0.03);
+                        gain.gain.exponentialRampToValueAtTime(0.0008, now + idx * 0.065 + 0.75);
+                        osc.connect(gain);
+                        gain.connect(ctx.destination);
+                        osc.start(now + idx * 0.065);
+                        osc.stop(now + idx * 0.065 + 0.78);
+                    });
+                }
+            } catch (_) {}
+        }
+
+        function toggleSoundEffects() {
+            soundEnabled = !soundEnabled;
+            const icon = document.getElementById('sound-toggle-icon');
+            const label = document.getElementById('sound-toggle-label');
+            if (soundEnabled) {
+                icon.className = 'ph-fill ph-speaker-high text-xs';
+                label.textContent = 'Som 3D';
+                playSoundEffect('sparkle');
+            } else {
+                icon.className = 'ph ph-speaker-slash text-xs';
+                label.textContent = 'Mudo';
+            }
+        }
+
+        // ==========================================================
+        // PARTÍCULAS AMBIENTAIS ROMÂNTICAS (POEIRA DOURADA & CORAÇÕES)
+        // ==========================================================
+        function initAmbientParticles() {
+            const container = document.getElementById('ambient-particles-layer');
+            if (!container) return;
+            container.innerHTML = '';
+            const glyphs = ['✦', '♥', '•', '✧', '♡'];
+            const colors = ['#d4a44f', '#9e473b', '#e5be73', '#c97a63'];
+
+            for (let i = 0; i < 16; i++) {
+                const p = document.createElement('span');
+                p.className = 'ambient-particle';
+                p.textContent = glyphs[i % glyphs.length];
+                p.style.left = `${4 + Math.random() * 92}%`;
+                p.style.color = colors[i % colors.length];
+                p.style.fontSize = `${8 + Math.random() * 7}px`;
+                p.style.setProperty('--dur', `${7 + Math.random() * 8}s`);
+                p.style.setProperty('--delay', `${-Math.random() * 12}s`);
+                p.style.setProperty('--drift-x', `${(Math.random() - 0.5) * 55}px`);
+                p.style.setProperty('--max-op', `${0.22 + Math.random() * 0.36}`);
+                container.appendChild(p);
+            }
+        }
+
+        // ==========================================================
+        // INICIALIZAÇÃO, CAPA 3D INTERATIVA E ABERTURA DO LIVRO EM 3D
+        // ==========================================================
+        let isBookTransitioning = false;
+
         function syncMetadataUI() {
             document.getElementById('cover-main-title').textContent = bookMeta.title;
             document.getElementById('cover-subtitle').textContent = bookMeta.subtitle;
-            document.getElementById('cover-author').innerHTML = `Autor: <span style="color: var(--text-main);">${bookMeta.author}</span>`;
+            document.getElementById('cover-author').innerHTML = `Autor: <span class="text-[#fff4d6] font-semibold">${bookMeta.author}</span>`;
             document.getElementById('hud-book-title').textContent = bookMeta.title;
+
+            const spineTitle = document.getElementById('spine-book-title');
+            if (spineTitle) spineTitle.textContent = `${bookMeta.title.toUpperCase()} • ${bookMeta.author.toUpperCase()}`;
+
+            const exLibrisAuthor = document.getElementById('ex-libris-author');
+            if (exLibrisAuthor) exLibrisAuthor.textContent = `Com todo o meu amor, ${bookMeta.author}`;
         }
 
+        function syncCoverInnerPreview() {
+            if (!pages || !pages.length) return;
+            const firstPage = pages[0];
+            const chapEl = document.getElementById('cover-inner-chap-title');
+            const paraEl = document.getElementById('cover-inner-first-para');
+            if (chapEl && firstPage) chapEl.textContent = firstPage.chapterTitle;
+            if (paraEl && firstPage && firstPage.paragraphs.length) {
+                const firstTextPara = firstPage.paragraphs.find(p => typeof p === 'string') || '';
+                paraEl.textContent = firstTextPara.replace(/\[\[(.*?)\|(.*?)\]\]/g, '$1');
+            }
+        }
+
+        function triggerPageContentAnimation() {
+            const activeSheet = document.getElementById('active-page-sheet');
+            if (!activeSheet) return;
+            activeSheet.classList.remove('page-content-animate');
+            void activeSheet.offsetWidth;
+            activeSheet.classList.add('page-content-animate');
+        }
+
+        /**
+         * Animação Cinematográfica 3D de Abertura da Capa Dura + Folhas em Leque + Mergulho na Página
+         */
         function openReaderFromCover() {
+            if (isBookTransitioning) return;
+            isBookTransitioning = true;
+
             const cover = document.getElementById('cover-lockscreen');
             const reader = document.getElementById('reader-viewport');
+            const book3d = document.getElementById('book-3d-object');
+            const frontHinge = document.getElementById('book-3d-front-hinge');
+            const shadow = document.getElementById('book-floor-shadow');
 
-            cover.style.opacity = '0';
-            cover.style.transform = 'translateX(-25px)';
+            syncCoverInnerPreview();
+            renderPageIntoSlot('active', currentPage);
+            syncHudAndBookmark();
 
+            playSoundEffect('bookOpen');
+            spawnCoverBurstParticles();
+
+            // Limpa qualquer ângulo manual de arraste e inicia a abertura 3D da capa dura
+            book3d.classList.remove('is-interacting', 'is-dragging-cover');
+            frontHinge.style.removeProperty('--cover-open-angle');
+            book3d.classList.add('book-opening-3d');
+            if (shadow) {
+                shadow.style.opacity = '0.18';
+                shadow.style.transform = 'translateX(-50%) scale(1.25)';
+            }
+
+            // Etapa 2: Enquanto a capa dura e as folhas de guarda se abrem em 3D, a câmera mergulha na página 1
+            setTimeout(() => {
+                book3d.classList.add('book-zoom-into-page');
+                cover.style.opacity = '0';
+            }, 520);
+
+            // Etapa 3: Revela o palco de leitura Kindle com os elementos da página animando
             setTimeout(() => {
                 cover.classList.add('hidden');
                 reader.classList.remove('hidden');
                 reader.classList.add('flex');
-                renderPageIntoSlot('active', currentPage);
-                syncHudAndBookmark();
+                triggerPageContentAnimation();
 
                 if (!onboardingShown) {
                     showOnboarding();
                     onboardingShown = true;
                 }
-            }, 260);
+                isBookTransitioning = false;
+            }, 980);
         }
 
+        /**
+         * Animação Reversa em 3D: Fecha o Livro voltando para a Capa Dura 3D
+         */
         function backToCover() {
+            if (isBookTransitioning) return;
+            isBookTransitioning = true;
+
             setHudVisibility(false);
             const cover = document.getElementById('cover-lockscreen');
             const reader = document.getElementById('reader-viewport');
+            const book3d = document.getElementById('book-3d-object');
+            const frontHinge = document.getElementById('book-3d-front-hinge');
+            const shadow = document.getElementById('book-floor-shadow');
 
+            playSoundEffect('pageTurn');
+
+            // Prepara a capa aberta com zoom para fazer a transição reversa suave
             reader.classList.add('hidden');
             reader.classList.remove('flex');
             cover.classList.remove('hidden');
+            cover.style.opacity = '1';
+
+            book3d.classList.add('book-opening-3d', 'book-zoom-into-page');
+            frontHinge.style.removeProperty('--cover-open-angle');
 
             requestAnimationFrame(() => {
-                cover.style.opacity = '1';
-                cover.style.transform = 'translateX(0)';
+                requestAnimationFrame(() => {
+                    // Recua o zoom
+                    book3d.classList.remove('book-zoom-into-page');
+                    // Fecha a capa dura 3D e as folhas de guarda
+                    setTimeout(() => {
+                        book3d.classList.remove('book-opening-3d');
+                        if (shadow) {
+                            shadow.style.opacity = '';
+                            shadow.style.transform = '';
+                        }
+                    }, 120);
+
+                    setTimeout(() => {
+                        isBookTransitioning = false;
+                    }, 920);
+                });
             });
+        }
+
+        /**
+         * Interatividade 3D na Capa: Inclinação Parallax + Arrastar a Capa Dura com o Dedo para Abrir
+         */
+        function setupInteractiveCover3D() {
+            const book3d = document.getElementById('book-3d-object');
+            const frontHinge = document.getElementById('book-3d-front-hinge');
+            const coverStage = document.getElementById('cover-book-stage');
+            if (!book3d || !frontHinge || !coverStage) return;
+
+            let isDown = false;
+            let startX = 0;
+            let startY = 0;
+            let hasDraggedCover = false;
+            let openProgress = 0;
+
+            // Efeito Parallax 3D suave ao mover o mouse no desktop
+            coverStage.addEventListener('pointermove', (e) => {
+                if (isBookTransitioning || isDown) return;
+                const rect = coverStage.getBoundingClientRect();
+                const nx = ((e.clientX - rect.left) / rect.width) - 0.5;
+                const ny = ((e.clientY - rect.top) / rect.height) - 0.5;
+                book3d.style.setProperty('--book-tilt-y', `${-14 + nx * 18}deg`);
+                book3d.style.setProperty('--book-tilt-x', `${5 - ny * 14}deg`);
+            });
+
+            coverStage.addEventListener('pointerleave', () => {
+                if (isBookTransitioning || isDown) return;
+                book3d.style.setProperty('--book-tilt-y', `-14deg`);
+                book3d.style.setProperty('--book-tilt-x', `5deg`);
+            });
+
+            // Arrastar a capa dura com o dedo ou clicar no livro 3D para abrir
+            book3d.addEventListener('pointerdown', (e) => {
+                if (isBookTransitioning) return;
+                isDown = true;
+                hasDraggedCover = false;
+                openProgress = 0;
+                startX = e.clientX;
+                startY = e.clientY;
+                book3d.classList.add('is-interacting');
+                if (book3d.setPointerCapture) {
+                    try { book3d.setPointerCapture(e.pointerId); } catch (_) {}
+                }
+            });
+
+            book3d.addEventListener('pointermove', (e) => {
+                if (!isDown || isBookTransitioning) return;
+                const dx = e.clientX - startX;
+                const dy = e.clientY - startY;
+
+                if (!hasDraggedCover && Math.abs(dx) > 8 && Math.abs(dx) > Math.abs(dy) * 0.7) {
+                    hasDraggedCover = true;
+                    book3d.classList.add('is-dragging-cover');
+                    syncCoverInnerPreview();
+                }
+
+                if (hasDraggedCover) {
+                    // Arrastar da direita para a esquerda abre a capa de 0deg até -160deg em tempo real!
+                    openProgress = Math.max(0, Math.min(0.95, -dx / 210));
+                    const angle = -openProgress * 162;
+                    frontHinge.style.setProperty('--cover-open-angle', `${angle}deg`);
+                    book3d.style.transform = `translate3d(${openProgress * 10}px, 0, ${openProgress * 45}px) rotateX(${5 - openProgress * 3}deg) rotateY(${-14 + openProgress * 12}deg)`;
+                }
+            });
+
+            function endCoverGesture() {
+                if (!isDown || isBookTransitioning) return;
+                isDown = false;
+                book3d.classList.remove('is-interacting', 'is-dragging-cover');
+                book3d.style.transform = '';
+
+                if (hasDraggedCover) {
+                    if (openProgress > 0.22) {
+                        openReaderFromCover();
+                    } else {
+                        frontHinge.style.removeProperty('--cover-open-angle');
+                    }
+                } else {
+                    // Toque simples no livro 3D abre o livro!
+                    openReaderFromCover();
+                }
+            }
+
+            book3d.addEventListener('pointerup', endCoverGesture);
+            book3d.addEventListener('pointercancel', endCoverGesture);
+        }
+
+        function spawnCoverBurstParticles() {
+            const shell = document.getElementById('kindle-app-shell');
+            if (!shell) return;
+            const symbols = ['✦', '♥', '✧', '♡'];
+            for (let i = 0; i < 12; i++) {
+                const el = document.createElement('span');
+                el.className = 'micro-heart';
+                el.textContent = symbols[i % symbols.length];
+                el.style.color = i % 2 === 0 ? '#e5be73' : 'var(--accent-color)';
+                el.style.left = `${35 + Math.random() * 30}%`;
+                el.style.top = `${42 + Math.random() * 16}%`;
+                el.style.setProperty('--hx', `${(Math.random() - 0.5) * 130}px`);
+                el.style.setProperty('--hrot', `${(Math.random() - 0.5) * 60}deg`);
+                el.style.fontSize = `${12 + Math.floor(Math.random() * 8)}px`;
+                shell.appendChild(el);
+                setTimeout(() => el.remove(), 2100);
+            }
         }
 
         function showOnboarding() {
@@ -1818,9 +2938,12 @@ Obrigado por ser minha parceira, minha melhor amiga e o grande amor da minha vid
             if (direction === 'next') {
                 if (currentPage >= pages.length - 1) return;
 
+                playSoundEffect('pageTurn');
+
                 if (pageTurnMode === 'eink') {
                     currentPage++;
                     renderPageIntoSlot('active', currentPage);
+                    triggerPageContentAnimation();
                     syncHudAndBookmark();
                     const stage = document.getElementById('interactive-book-stage');
                     stage.classList.remove('eink-flash-anim');
@@ -1830,10 +2953,11 @@ Obrigado por ser minha parceira, minha melhor amiga e o grande amor da minha vid
                 }
 
                 renderPageIntoSlot('underlay', currentPage + 1);
-                animateCurlProgress(0.02, 1, 'next', 360, () => {
+                animateCurlProgress(0.02, 1, 'next', 380, () => {
                     currentPage++;
                     renderPageIntoSlot('active', currentPage);
                     resetCurlLayers();
+                    triggerPageContentAnimation();
                     syncHudAndBookmark();
                 });
             } else if (direction === 'prev') {
@@ -1842,9 +2966,12 @@ Obrigado por ser minha parceira, minha melhor amiga e o grande amor da minha vid
                     return;
                 }
 
+                playSoundEffect('pageTurn');
+
                 if (pageTurnMode === 'eink') {
                     currentPage--;
                     renderPageIntoSlot('active', currentPage);
+                    triggerPageContentAnimation();
                     syncHudAndBookmark();
                     const stage = document.getElementById('interactive-book-stage');
                     stage.classList.remove('eink-flash-anim');
@@ -1854,10 +2981,11 @@ Obrigado por ser minha parceira, minha melhor amiga e o grande amor da minha vid
                 }
 
                 renderPageIntoSlot('underlay', currentPage - 1);
-                animateCurlProgress(0.02, 1, 'prev', 360, () => {
+                animateCurlProgress(0.02, 1, 'prev', 380, () => {
                     currentPage--;
                     renderPageIntoSlot('active', currentPage);
                     resetCurlLayers();
+                    triggerPageContentAnimation();
                     syncHudAndBookmark();
                 });
             }
@@ -1953,11 +3081,13 @@ Obrigado por ser minha parceira, minha melhor amiga e o grande amor da minha vid
                     const shouldComplete = p > 0.24 || (velocityX > 0.38 && p > 0.05);
 
                     if (shouldComplete) {
+                        playSoundEffect('pageTurn');
                         const remainingDuration = Math.max(160, Math.round((1 - p) * 320));
                         animateCurlProgress(p, 1, dir, remainingDuration, () => {
                             currentPage += (dir === 'next' ? 1 : -1);
                             renderPageIntoSlot('active', currentPage);
                             resetCurlLayers();
+                            triggerPageContentAnimation();
                             syncHudAndBookmark();
                         });
                     } else {
@@ -2058,6 +3188,7 @@ Obrigado por ser minha parceira, minha melhor amiga e o grande amor da minha vid
             syncBookmarkRibbon(pageData.bookmarked);
 
             if (pageData.bookmarked) {
+                playSoundEffect('sparkle');
                 spawnMicroHearts();
             }
         }
@@ -2079,17 +3210,19 @@ Obrigado por ser minha parceira, minha melhor amiga e o grande amor da minha vid
 
         function spawnMicroHearts() {
             const shell = document.getElementById('kindle-app-shell');
-            const symbols = ['♥', '✦', '♡'];
-            for (let i = 0; i < 6; i++) {
+            const symbols = ['♥', '✦', '♡', '✧'];
+            for (let i = 0; i < 9; i++) {
                 const el = document.createElement('span');
                 el.className = 'micro-heart';
                 el.textContent = symbols[i % symbols.length];
-                el.style.color = 'var(--accent-color)';
-                el.style.right = `${18 + (Math.random() * 24 - 12)}px`;
-                el.style.top = `${42 + (Math.random() * 14)}px`;
-                el.style.fontSize = `${11 + Math.floor(Math.random() * 6)}px`;
+                el.style.color = i % 2 === 0 ? 'var(--accent-color)' : '#d4a44f';
+                el.style.right = `${16 + (Math.random() * 34 - 17)}px`;
+                el.style.top = `${42 + (Math.random() * 16)}px`;
+                el.style.setProperty('--hx', `${(Math.random() - 0.5) * 60}px`);
+                el.style.setProperty('--hrot', `${(Math.random() - 0.5) * 45}deg`);
+                el.style.fontSize = `${11 + Math.floor(Math.random() * 7)}px`;
                 shell.appendChild(el);
-                setTimeout(() => el.remove(), 2000);
+                setTimeout(() => el.remove(), 2100);
             }
         }
 
@@ -2110,6 +3243,8 @@ Obrigado por ser minha parceira, minha melhor amiga e o grande amor da minha vid
             if (event) event.stopPropagation();
             const quote = decodeURIComponent(encodedQuote);
             const note = decodeURIComponent(encodedNote);
+
+            playSoundEffect('sparkle');
 
             document.getElementById('sheet-highlight-meta').textContent = `Destacado por 1 pessoa (${bookMeta.author})`;
             document.getElementById('sheet-highlight-quote').textContent = `“${quote}”`;
@@ -2200,6 +3335,7 @@ Obrigado por ser minha parceira, minha melhor amiga e o grande amor da minha vid
             currentPage = targetIdx;
             renderPageIntoSlot('active', currentPage);
             resetCurlLayers();
+            triggerPageContentAnimation();
             syncHudAndBookmark();
         }
 
@@ -2281,9 +3417,11 @@ Obrigado por ser minha parceira, minha melhor amiga e o grande amor da minha vid
 
             syncMetadataUI();
             buildPaginatedBook(rawStoryText);
+            syncCoverInnerPreview();
             currentPage = 0;
             renderPageIntoSlot('active', currentPage);
             resetCurlLayers();
+            triggerPageContentAnimation();
             syncHudAndBookmark();
             closeSheet('editor-sheet');
             setHudVisibility(false);
@@ -2298,9 +3436,11 @@ Obrigado por ser minha parceira, minha melhor amiga e o grande amor da minha vid
 
             syncMetadataUI();
             buildPaginatedBook(rawStoryText);
+            syncCoverInnerPreview();
             currentPage = 0;
             renderPageIntoSlot('active', currentPage);
             resetCurlLayers();
+            triggerPageContentAnimation();
             syncHudAndBookmark();
             closeSheet('editor-sheet');
         }
@@ -2326,6 +3466,8 @@ Obrigado por ser minha parceira, minha melhor amiga e o grande amor da minha vid
             if (event) event.stopPropagation();
             const src = decodeURIComponent(encodedSrc);
             const caption = decodeURIComponent(encodedCaption);
+
+            playSoundEffect('sparkle');
 
             const modal = document.getElementById('polaroid-lightbox');
             const img = document.getElementById('lightbox-img');
@@ -2436,8 +3578,11 @@ Obrigado por ser minha parceira, minha melhor amiga e o grande amor da minha vid
 
         // Inicialização ao carregar
         window.addEventListener('DOMContentLoaded', () => {
+            initAmbientParticles();
             syncMetadataUI();
             buildPaginatedBook(rawStoryText);
+            syncCoverInnerPreview();
+            setupInteractiveCover3D();
             setupInteractivePageStage();
             if (window.location.href.startsWith('http')) {
                 const urlSpan = document.getElementById('current-share-url');
